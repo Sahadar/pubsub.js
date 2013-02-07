@@ -1,0 +1,4 @@
+pubsub.js
+=========
+
+VanillaJS Pubsub
