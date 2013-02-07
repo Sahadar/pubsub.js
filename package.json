@@ -1,0 +1,21 @@
+{
+  "name": "pubsub.js",
+  "description": "Vanilla JS Pubsub implementation with wildcards",
+  "version": "0.0.1",
+  "author": "Wojciech Dłubacz <wdsahadar@gmail.com>",
+  "contributors": [
+  ],
+  "repository": {
+      "type": "git",
+      "url": "git@github.com:Sahadar/pubsub.js.git"
+  },
+  "keywords": ["pubsub", "listener", "vanilla"],
+  "engines": {"node": ">= 0.6.x"},
+  "main": "pubsub.js",
+  "licenses": [
+    {
+       "type": "MIT",
+       "url": "http: //www.opensource.org/licenses/mit-license.php"
+    }
+  ]
+}
