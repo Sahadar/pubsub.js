@@ -36,5 +36,5 @@ test("Publish test (many params)", function() {
 		};
 	});
 	pubsub.publish('hello/world3', [param1, param2]);
-	ok(done.param1 === param1 && done.param2 === param2, 'Done has proper value');
+	ok(values.param1 === param1 && values.param2 === param2, 'Values has proper values');
 });

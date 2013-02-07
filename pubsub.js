@@ -1,5 +1,6 @@
 'use strict';
 (function() {
+	var _eventObject = {};
 	var pubsub = {
 		/**
 		 * Publish event
@@ -17,9 +18,15 @@
 				i;
 			
 			function executeCallback(subscribtions) {
-				$.each(subscribtions, function() {
-					this.callback.apply(this.object, args);
-				});
+				var i = 0,
+					subscribton = null;
+
+				for(i = 0; i < subscribtions.length; i++) {
+					subscribton = subscribtions[i]
+					if(typeof subscribton === 'object' && subscribton != null) {		
+						subscribton.callback.apply(subscribton.object, args);
+					}
+				}
 			}
 			
 			nsObject = _eventObject;
@@ -97,7 +104,7 @@
 				}
 			});
 		}
-	};+-
+	};
 
 	if(module.exports) {
 		module.exports = pubsub;
