@@ -45,6 +45,19 @@ Vanilla JS pubsub implementation
 	//nothing happen - we've previously unsubscribed that subscribtion
 ```
 
+### Event inheritance
+
+```javascript
+	//subscribe to 'hello' namespace
+	var subscribtion = pubsub.subscribe('hello', function() {
+		console.log('hello world!');
+	});
+	//publish event on 'hello/world' namespace
+	pubsub.publish('hello/world', true);
+	//prints "hello world" inside console
+	//first event goes to "hello" namespace, then it tries to execute on "hello/world" but nothing is listening on it
+```
+
 ## Changelog
 * v1.0.0
 	* Every basic tests passing

@@ -57,7 +57,7 @@ test("Unsubscribe test (basic)", function() {
 	ok(values.param1 === param1 && values.param2 === param2, 'Values has proper value');
 });
 
-test("Wildcards test (basic)", function() {
+test("Inheritance test (basic)", function() {
 	var values = {};
 	var param1 = "some param1";
 	var param2 = "some param2";
