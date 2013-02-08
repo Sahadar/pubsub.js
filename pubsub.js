@@ -1,17 +1,17 @@
 'use strict';
 (function() {
 	var _eventObject = {};
-	var _options = {
-		separator : '/',
-		recurrent : false,
-		log       : false
-	}
 
 	function generateId() {
 		return parseInt(Math.random()*1000000000000, 10);
 	}
 
 	var pubsub = {
+		options : {
+			separator : '/',
+			recurrent : false,
+			log       : false
+		},
 		/**
 		 * Publish event
 		 * @param ns_string string namespace string splited by dots
@@ -20,8 +20,9 @@
 		 * @param depth integer how many namespaces separated by dots will be executed
 		 */
 		publish : function(ns_string, args, recurrent, depth) {
-			var parts = ns_string.split(_options.separator),
-				recurrent = recurrent || _options.recurrent, // bubbles event throught namespace if true
+			var that = this,
+				parts = ns_string.split(that.options.separator),
+				recurrent = recurrent || that.options.recurrent, // bubbles event throught namespace if true
 				nsObject, //Namespace object to which we attach event
 				args = (args) ? args : [],
 				i;
@@ -41,7 +42,7 @@
 			nsObject = _eventObject;
 			for (i = 0; i < parts.length; i += 1) {
 				if (typeof nsObject[parts[i]] === "undefined") {
-					if(_options.log) {
+					if(that.options.log) {
 						console.warn('There is no ' + ns_string + ' subscription');
 					}
 					return null;
@@ -65,7 +66,8 @@
 		 * @param givenObject object/nothing Optional object which will be used as "this" in callback
 		 */
 		subscribe : function(ns_string, callback, givenObject) {
-			var parts = ns_string.split(_options.separator),
+			var that = this,
+				parts = ns_string.split(that.options.separator),
 				nsObject, //Namespace object to which we attach event
 				givenObjectSet = (givenObject) ? true : false,
 				givenObject = (givenObjectSet) ? givenObject : callback,
@@ -95,12 +97,13 @@
 			};
 
 			nsObject['_events'][subscribtionId] = eventObject;
-			return [parts.join(_options.separator), eventObject];
+			return [parts.join(that.options.separator), eventObject];
 		},
 		unsubscribe : function(subscribeObject) {
-			var ns_string = subscribeObject[0],
-				parts = ns_string.split(_options.separator),
+			var that = this,
+				ns_string = subscribeObject[0],
 				eventObject = subscribeObject[1],
+				parts = ns_string.split(that.options.separator),
 				nsObject,
 				i = 0;
 			
@@ -108,7 +111,7 @@
 			nsObject = _eventObject;
 			for (i = 0; i < parts.length; i += 1) {
 				if (typeof nsObject[parts[i]] === "undefined") {
-					if(_options.log) {
+					if(that.options.log) {
 						console.error('There is no ' + ns_string + ' subscription');
 					}
 					return null;
@@ -118,7 +121,7 @@
 			
 			if(nsObject['_events'][eventObject['eventId']]) {
 				delete nsObject['_events'][eventObject['eventId']];
-			} else if(_options.log) {
+			} else if(that.options.log) {
 				console.info('There is no such subscribtion: ', subscribeObject);
 			}
 		}
