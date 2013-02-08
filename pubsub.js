@@ -127,7 +127,7 @@
 		}
 	};
 
-	if(module.exports) {
+	if(typeof module === 'object' && module.exports) {
 		module.exports = pubsub;
 	} else {
 		window.pubsub = pubsub;
