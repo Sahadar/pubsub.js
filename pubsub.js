@@ -20,8 +20,7 @@
 		 * @param depth integer how many namespaces separated by dots will be executed
 		 */
 		publish : function(ns_string, args, recurrent, depth) {
-			var ns_string = (typeof ns_string === 'string') ? ns_string : (console.error('ns_string must be string type'), 'randomString'),
-				parts = ns_string.split(_options.separator),
+			var parts = ns_string.split(_options.separator),
 				recurrent = recurrent || _options.recurrent, // bubbles event throught namespace if true
 				nsObject, //Namespace object to which we attach event
 				args = (args) ? args : [],
@@ -66,8 +65,7 @@
 		 * @param givenObject object/nothing Optional object which will be used as "this" in callback
 		 */
 		subscribe : function(ns_string, callback, givenObject) {
-			var ns_string = (typeof ns_string === 'string') ? ns_string : (console.error('ns_string must be string type'), 'randomString'),
-				parts = ns_string.split(_options.separator),
+			var parts = ns_string.split(_options.separator),
 				nsObject, //Namespace object to which we attach event
 				givenObjectSet = (givenObject) ? true : false,
 				givenObject = (givenObjectSet) ? givenObject : callback,
