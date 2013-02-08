@@ -8,8 +8,7 @@
 	}
 
 	function generateId() {
-		var id = Math.random()*1000000000000;
-		return parseInt(id, 10);
+		return parseInt(Math.random()*1000000000000, 10);
 	}
 
 	var pubsub = {
