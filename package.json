@@ -1,7 +1,7 @@
 {
   "name": "pubsub.js",
   "description": "Vanilla JS Pubsub implementation with wildcards",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "Wojciech Dłubacz <wdsahadar@gmail.com>",
   "contributors": [
   ],
