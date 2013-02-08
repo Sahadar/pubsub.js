@@ -45,10 +45,6 @@ Vanilla JS pubsub implementation
 	//nothing happen - we've previously unsubscribed that subscribtion
 ```
 
-## Versioning
-
-pubsub.js uses [Semantic Versioning](http://semver.org/) for predictable versioning.
-
 ## Changelog
 * v1.0.0
 	* Every basic tests passing
