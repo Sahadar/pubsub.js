@@ -31,7 +31,7 @@
 					subscribtion = null;
 
 				for(subscribtion in subscribtions) {
-					if(typeof subscribtions[subscribtion] === 'object' && subscribtions[subscribtion] != null && subscribtions.hasOwnProperty(subscribtion)) {
+					if(typeof subscribtions[subscribtion] === 'object' && subscribtions.hasOwnProperty(subscribtion)) {
 						subscribtion = subscribtions[subscribtion];	
 						subscribtion.callback.apply(subscribtion.object, args);
 					}
