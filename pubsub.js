@@ -116,7 +116,7 @@
 			}
 			
 			forEach(nsObject['_events'], function(eventId){
-		        if(nsObject['_events'][eventId] == eventObject) {
+		        if(nsObject['_events'][eventId] === eventObject) {
 		        	nsObject['_events'].splice(eventId, 1);
 		        }
 		    });
