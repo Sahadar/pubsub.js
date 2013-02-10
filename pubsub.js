@@ -50,20 +50,22 @@
 				nsObject, //Namespace object to which we attach event
 				args = (args) ? args : [],
 				partsLength = parts.length,
+				iPart = null,
 				i;
 
 			nsObject = _eventObject;
 			for (i = 0; i < partsLength; i++) {
-				if(parts[i] === '*') {
+				iPart = parts[i];
+				if(iPart === '*') {
 					executeWildcard(nsObject, args);
 					return null;
-				} else if (typeof nsObject[parts[i]] === "undefined") {
+				} else if (typeof nsObject[iPart] === "undefined") {
 					if(that.options.log) {
 						console.warn('There is no ' + ns_string + ' subscription');
 					}
 					return null;
 				}
-				nsObject = nsObject[parts[i]];
+				nsObject = nsObject[iPart];
 				
 				if(recurrent === true && typeof depth !== 'number') { //depth is not defined
 					executeCallback(nsObject['_events'], args);
