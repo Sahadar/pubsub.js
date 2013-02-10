@@ -56,7 +56,8 @@ Vanilla JS pubsub implementation
 	//publish event on 'hello/world' namespace
 	pubsub.publish('hello/world', true);
 	//prints "hello world" inside console
-	//first event goes to "hello" namespace, then it tries to execute on "hello/world" but nothing is listening on it
+	//first event goes to "hello" namespace
+	//then it tries to execute on "hello/world" but nothing is listening on it
 ```
 
 ### Wildcard "*" <-- one namespace deeper
