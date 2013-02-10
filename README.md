@@ -12,6 +12,7 @@ Vanilla JS pubsub implementation
 * Wildcards
 * Controll under event bubbling depth
 * Easy to understand
+* Works with require.js library
 
 ## Examples
 

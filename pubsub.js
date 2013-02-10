@@ -2,8 +2,13 @@
 (function() {
 	var _eventObject = {};
 
-	function generateId() {
-		return parseInt(Math.random()*1000000000000, 10);
+	function forEach(dataArray, callback) {
+		var i = 0,
+			arrayLength = dataArray.length;
+
+		for(i = 0; i < arrayLength; i++) {
+			callback.apply(dataArray[i], [i]);
+		}
 	}
 
 	var pubsub = {
@@ -28,15 +33,13 @@
 				i;
 			
 			function executeCallback(subscribtions) {
-				var i = 0,
-					subscribtion = null;
-
-				for(subscribtion in subscribtions) {
-					if(typeof subscribtions[subscribtion] === 'object' && subscribtions.hasOwnProperty(subscribtion)) {
-						subscribtion = subscribtions[subscribtion];	
+				forEach(subscribtions, function(subscribtionId) {
+					var subscribtion = null;
+					if(typeof subscribtions[subscribtionId] === 'object' && subscribtions.hasOwnProperty(subscribtionId)) {
+						subscribtion = subscribtions[subscribtionId];	
 						subscribtion.callback.apply(subscribtion.object, args);
 					}
-				}
+				});
 			}
 			
 			nsObject = _eventObject;
@@ -72,31 +75,24 @@
 				givenObjectSet = (givenObject) ? true : false,
 				givenObject = (givenObjectSet) ? givenObject : callback,
 				eventObject = null,
-				i = 0,
-				k = 0,
-				subscribtionId = null;
+				i = 0;
 			
 			//Iterating through _eventObject to find proper nsObject
 			nsObject = _eventObject;
 			for (i = 0; i < parts.length; i += 1) {
 				if (typeof nsObject[parts[i]] === "undefined") {
 					nsObject[parts[i]] = {};
-					nsObject[parts[i]]['_events'] = {};
+					nsObject[parts[i]]['_events'] = [];
 				}
 				nsObject = nsObject[parts[i]];
 			}
 			
-			do {
-				subscribtionId = generateId();
-			} while(typeof nsObject['_events'][subscribtionId] === 'object');
-			
 			eventObject = {
-				eventId		: subscribtionId,
 				callback	: callback,
 				object		: givenObject // "this" parameter in executed function
 			};
 
-			nsObject['_events'][subscribtionId] = eventObject;
+			nsObject['_events'].push(eventObject);
 			return [parts.join(that.options.separator), eventObject];
 		},
 		unsubscribe : function(subscribeObject) {
@@ -119,16 +115,16 @@
 				nsObject = nsObject[parts[i]];
 			}
 			
-			if(nsObject['_events'][eventObject['eventId']]) {
-				delete nsObject['_events'][eventObject['eventId']];
-			} else if(that.options.log) {
-				console.info('There is no such subscribtion: ', subscribeObject);
-			}
+			nsObject && forEach(nsObject['_events'], function(functionId){
+		        if(this == eventObject) {
+		        	nsObject['_events'].splice(functionId, 1);
+		        }
+		    });
 		}
 	};
 
 	//if sbd's using requirejs library to load pubsub.js
-	if(define) {
+	if(typeof define === 'function') {
 		define(pubsub);
 	}
 
