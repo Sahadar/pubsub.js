@@ -59,6 +59,35 @@ Vanilla JS pubsub implementation
 	//first event goes to "hello" namespace, then it tries to execute on "hello/world" but nothing is listening on it
 ```
 
+### Wildcard "*" <-- one namespace deeper
+
+```javascript
+	var number = 0;
+
+	//subscribe to "hello/world" namespace
+	pubsub.subscribe('hello/world', function() {
+		number++;
+	});
+	//subscribe to "hello/earth" namespace
+	pubsub.subscribe('hello/earth', function() {
+		number++;
+	});
+	//subscribe to "hello/galaxy" namespace
+	pubsub.subscribe('hello/galaxy', function() {
+		number++;
+	});
+	//subscribe to "hello/world/inner" namespace
+	pubsub.subscribe('hello/world/inner', function() {
+		number++;
+	});
+
+	pubsub.publish('hello/*');
+	//hello/* executes:
+	//	hello/world, hello/earth, hello/galaxy
+	//	namespaces, hello/world/inner is not executed, "*" goes only one namespace deeper
+	console.log(number); //3
+```
+
 ## Changelog
 * v1.0.1
 	* Improved performance - about 350% on chrome, 20% on firefox

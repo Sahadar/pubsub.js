@@ -21,6 +21,15 @@
 		});
 	}
 
+	function executeWildcard(nsObject, args) {
+		var nsElement;
+		for(nsElement in nsObject) {
+			if(nsElement !== '_events' && nsObject.hasOwnProperty(nsElement)) {
+				executeCallback(nsObject[nsElement]['_events'], args);
+			}
+		}
+	}
+
 	var pubsub = {
 		options : {
 			separator : '/',
@@ -45,13 +54,16 @@
 
 			nsObject = _eventObject;
 			for (i = 0; i < partsLength; i++) {
-				nsObject = nsObject[parts[i]];
-				if (typeof nsObject === "undefined") {
+				if(parts[i] === '*') {
+					executeWildcard(nsObject, args);
+					return null;
+				} else if (typeof nsObject[parts[i]] === "undefined") {
 					if(that.options.log) {
 						console.warn('There is no ' + ns_string + ' subscription');
 					}
 					return null;
 				}
+				nsObject = nsObject[parts[i]];
 				
 				if(recurrent === true && typeof depth !== 'number') { //depth is not defined
 					executeCallback(nsObject['_events'], args);
