@@ -7,7 +7,7 @@
 			arrayLength = dataArray.length;
 
 		for(i = 0; i < arrayLength; i++) {
-			callback.apply(dataArray[i], [i]);
+			callback(i);
 		}
 	}
 
@@ -115,9 +115,9 @@
 				nsObject = nsObject[parts[i]];
 			}
 			
-			nsObject && forEach(nsObject['_events'], function(functionId){
-		        if(this == eventObject) {
-		        	nsObject['_events'].splice(functionId, 1);
+			forEach(nsObject['_events'], function(eventId){
+		        if(nsObject['_events'][eventId] == eventObject) {
+		        	nsObject['_events'].splice(eventId, 1);
 		        }
 		    });
 		}
