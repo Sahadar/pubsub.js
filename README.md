@@ -60,6 +60,8 @@ Vanilla JS pubsub implementation
 ```
 
 ## Changelog
+* v1.0.1
+	* Improved performance - about 350% on chrome, 20% on firefox
 * v1.0.0
 	* Every basic tests passing
 	
