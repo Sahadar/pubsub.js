@@ -11,7 +11,7 @@
 		}
 	}
 
-	function executeCallback(subscribtions) {
+	function executeCallback(subscribtions, args) {
 		forEach(subscribtions, function(subscribtionId) {
 			var subscribtion = null;
 			if(typeof subscribtions[subscribtionId] === 'object' && subscribtions.hasOwnProperty(subscribtionId)) {
@@ -53,14 +53,14 @@
 				nsObject = nsObject[parts[i]];
 				
 				if(recurrent === true && typeof depth !== 'number') { //depth is not defined
-					executeCallback(nsObject['_events']);
+					executeCallback(nsObject['_events'], args);
 				} else if(recurrent === true && typeof depth === 'number' && i >= parts.length - depth) { //if depth is defined
-					executeCallback(nsObject['_events']);
+					executeCallback(nsObject['_events'], args);
 				}
 			}
 			
 			if(recurrent === false) {
-				executeCallback(nsObject['_events']);
+				executeCallback(nsObject['_events'], args);
 			}
 		},
 		/**
