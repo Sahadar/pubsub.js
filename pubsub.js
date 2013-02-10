@@ -127,6 +127,11 @@
 		}
 	};
 
+	//if sbd's using requirejs library to load pubsub.js
+	if(define) {
+		define(pubsub);
+	}
+
 	if(typeof module === 'object' && module.exports) {
 		module.exports = pubsub;
 	} else {
