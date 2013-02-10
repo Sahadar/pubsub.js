@@ -40,21 +40,22 @@
 				recurrent = recurrent || that.options.recurrent, // bubbles event throught namespace if true
 				nsObject, //Namespace object to which we attach event
 				args = (args) ? args : [],
+				partsLength = parts.length,
 				i;
 
 			nsObject = _eventObject;
-			for (i = 0; i < parts.length; i++) {
-				if (typeof nsObject[parts[i]] === "undefined") {
+			for (i = 0; i < partsLength; i++) {
+				nsObject = nsObject[parts[i]];
+				if (typeof nsObject === "undefined") {
 					if(that.options.log) {
 						console.warn('There is no ' + ns_string + ' subscription');
 					}
 					return null;
 				}
-				nsObject = nsObject[parts[i]];
 				
 				if(recurrent === true && typeof depth !== 'number') { //depth is not defined
 					executeCallback(nsObject['_events'], args);
-				} else if(recurrent === true && typeof depth === 'number' && i >= parts.length - depth) { //if depth is defined
+				} else if(recurrent === true && typeof depth === 'number' && i >= partsLength - depth) { //if depth is defined
 					executeCallback(nsObject['_events'], args);
 				}
 			}
