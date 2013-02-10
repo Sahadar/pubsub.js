@@ -11,6 +11,16 @@
 		}
 	}
 
+	function executeCallback(subscribtions) {
+		forEach(subscribtions, function(subscribtionId) {
+			var subscribtion = null;
+			if(typeof subscribtions[subscribtionId] === 'object' && subscribtions.hasOwnProperty(subscribtionId)) {
+				subscribtion = subscribtions[subscribtionId];	
+				subscribtion.callback.apply(subscribtion.object, args);
+			}
+		});
+	}
+
 	var pubsub = {
 		options : {
 			separator : '/',
@@ -31,19 +41,9 @@
 				nsObject, //Namespace object to which we attach event
 				args = (args) ? args : [],
 				i;
-			
-			function executeCallback(subscribtions) {
-				forEach(subscribtions, function(subscribtionId) {
-					var subscribtion = null;
-					if(typeof subscribtions[subscribtionId] === 'object' && subscribtions.hasOwnProperty(subscribtionId)) {
-						subscribtion = subscribtions[subscribtionId];	
-						subscribtion.callback.apply(subscribtion.object, args);
-					}
-				});
-			}
-			
+
 			nsObject = _eventObject;
-			for (i = 0; i < parts.length; i += 1) {
+			for (i = 0; i < parts.length; i++) {
 				if (typeof nsObject[parts[i]] === "undefined") {
 					if(that.options.log) {
 						console.warn('There is no ' + ns_string + ' subscription');
@@ -51,6 +51,7 @@
 					return null;
 				}
 				nsObject = nsObject[parts[i]];
+				
 				if(recurrent === true && typeof depth !== 'number') { //depth is not defined
 					executeCallback(nsObject['_events']);
 				} else if(recurrent === true && typeof depth === 'number' && i >= parts.length - depth) { //if depth is defined
