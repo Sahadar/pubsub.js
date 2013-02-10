@@ -84,7 +84,9 @@ Vanilla JS pubsub implementation
 	pubsub.publish('hello/*');
 	//hello/* executes:
 	//	hello/world, hello/earth, hello/galaxy
-	//	namespaces, hello/world/inner is not executed, "*" goes only one namespace deeper
+	//	namespace, hello/world/inner is not executed
+	//	
+	//	"*" goes only one namespace deeper
 	console.log(number); //3
 ```
 
