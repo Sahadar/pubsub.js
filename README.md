@@ -13,6 +13,7 @@ Vanilla JS pubsub implementation
 * Controll under event bubbling depth
 * Easy to understand
 * Works with require.js library
+* Configurable
 
 ## Examples
 
