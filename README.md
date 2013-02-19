@@ -27,7 +27,19 @@ Vanilla JS pubsub implementation
 	//publish event on 'hello/world' namespace
 	pubsub.publish('hello/world');
 	//prints "hello world" inside console
-```    
+```
+
+### Publish with parameter
+
+```javascript
+	//subscribe to 'hello/world' namespace
+	pubsub.subscribe('hello/world', function(data) {
+		console.log(data);
+	});
+	//publish event on 'hello/world' namespace
+	pubsub.publish('hello/world', ['hello!']); // second parameter is an array of arguments
+	//prints "hello!" inside console
+```
 
 ### Unsubscribe
 
