@@ -59,6 +59,20 @@ Vanilla JS pubsub implementation
 	//nothing happen - we've previously unsubscribed that subscribtion
 ```
 
+### Changing default configuration
+
+```javascript
+	pubsub.options.separator = '.';
+
+	//subscribe to 'hello.world' namespace
+	pubsub.subscribe('hello.world', function(data) { //event namespace separated by dots
+		console.log(data);
+	});
+	//publish event on 'hello.world' namespace
+	pubsub.publish('hello.world', ['hello!']); // second parameter is an array of arguments
+	//prints "hello!" inside console
+```
+
 ### Event inheritance
 
 ```javascript
