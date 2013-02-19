@@ -93,6 +93,8 @@ Vanilla JS pubsub implementation
 ```
 
 ## Changelog
+* v1.0.3
+	* Changed scope binding in pubsub
 * v1.0.2
 	* Wildcard "*" added
 * v1.0.1

@@ -1,5 +1,5 @@
 'use strict';
-(function() {
+(function(scope) {
 	var _eventObject = {};
 
 	function forEach(dataArray, callback) {
@@ -146,7 +146,12 @@
 
 	if(typeof module === 'object' && module.exports) {
 		module.exports = pubsub;
-	} else {
+	}
+
+	if(window) {
 		window.pubsub = pubsub;
 	}
-})();
+	if(window && window !== scope) {
+		scope.pubsub = pubsub;
+	}
+})(this);
