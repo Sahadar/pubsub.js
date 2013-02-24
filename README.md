@@ -9,6 +9,7 @@ Vanilla JS pubsub implementation
 * Using native JavaScript code
 * Works on server and browser side smoothly
 * Event inheritance
+* subscribeOnce method
 * Wildcards
 * Controll under event bubbling depth
 * Easy to understand
@@ -93,7 +94,7 @@ Vanilla JS pubsub implementation
 	var iterator = 0;
 	var data = null;
 
-	var subscribtion = pubsub.subscribeOnce('hello/world', function(param) {
+	pubsub.subscribeOnce('hello/world', function(param) {
 		data = param;
 		iterator++;
 	});
