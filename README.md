@@ -87,6 +87,22 @@ Vanilla JS pubsub implementation
 	//then it tries to execute on "hello/world" but nothing is listening on it
 ```
 
+### Method: subscribeOnce
+
+```javascript
+	var iterator = 0;
+	var data = null;
+
+	var subscribtion = pubsub.subscribeOnce('hello/world', function(param) {
+		data = param;
+		iterator++;
+	});
+	pubsub.publish('hello/world', ['hello']);
+	pubsub.publish('hello/world', ['world']);
+	console.log(iterator); //1
+	console.log(data); //'hello'
+```
+
 ### Wildcard "*" <-- one namespace deeper
 
 ```javascript
@@ -119,6 +135,8 @@ Vanilla JS pubsub implementation
 ```
 
 ## Changelog
+* v1.0.4
+	* Added subscribeOnce method
 * v1.0.3
 	* Changed scope binding in pubsub
 * v1.0.2

@@ -44,6 +44,22 @@ test("Publish test (param)", function() {
 	pubsub.unsubscribe(subscribtion);
 });
 
+test("Method: subscribeOnce test (with param)", function() {
+	var iterator = 0;
+	var done = null;
+
+	ok(typeof pubsub.subscribeOnce === 'function', 'Pubsub has method subscribeOnce');
+	pubsub.subscribeOnce('hello/world', function(param) {
+		done = param;
+		iterator++;
+	});
+	pubsub.publish('hello/world', ['hello']);
+	pubsub.publish('hello/world', ['world']);
+	console.log(done);
+	ok(done === 'hello', 'Done has proper value');
+	ok(iterator === 1, 'Subscribtion executed only once');
+});
+
 test("Publish test (many params)", function() {
 	var values = {};
 	var param1 = "some param1";

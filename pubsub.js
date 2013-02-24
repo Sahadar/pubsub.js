@@ -111,6 +111,16 @@
 			nsObject['_events'].push(eventObject);
 			return [parts.join(that.options.separator), eventObject];
 		},
+		subscribeOnce : function(ns_string, callback, givenObject) {
+			var that = this;
+			var subscribtion = null;
+			var subscribtionCallback = function() {
+					callback.apply(this, arguments);
+					that.unsubscribe(subscribtion);
+				};
+
+			subscribtion = that.subscribe.apply(that, [ns_string, subscribtionCallback, givenObject]);
+		},
 		unsubscribe : function(subscribeObject) {
 			var that = this,
 				ns_string = subscribeObject[0],
