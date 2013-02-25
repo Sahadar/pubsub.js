@@ -2,6 +2,7 @@ pubsub.js
 =========
 
 JavaScript pubsub implementation with wildcards and inheritance
+
 [NPM pubsub.js link](https://npmjs.org/package/pubsub.js)
 
 ## Features
