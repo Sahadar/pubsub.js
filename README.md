@@ -205,7 +205,14 @@ JavaScript pubsub implementation with wildcards and inheritance
 ```
 
 ## Installation
-Download from github or type `npm install pubsub.js` 
+Download from github or type `npm install pubsub.js`
+
+Default pubsub.js configuration:
+```javascript
+	separator : '/' //defined namespace separator
+	recurrent : false // defines inheritance of publish event
+	log       : false // set to true will log unsubscribed namespaces to which You publish event
+```
 
 ## Changelog
 * v1.0.5
