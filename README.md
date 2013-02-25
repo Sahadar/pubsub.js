@@ -1,7 +1,7 @@
 pubsub.js
 =========
 
-Vanilla JS pubsub implementation
+JavaScript pubsub implementation with wildcards and inheritance
 
 ## Features
 
