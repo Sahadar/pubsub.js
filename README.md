@@ -205,8 +205,7 @@ JavaScript pubsub implementation with wildcards and inheritance
 ```
 
 ## Installation
-* download from github
-* type `npm install pubsub.js` 
+Download from github or type `npm install pubsub.js` 
 
 ## Changelog
 * v1.0.5
