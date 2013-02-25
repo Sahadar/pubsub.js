@@ -140,7 +140,7 @@ JavaScript pubsub implementation with wildcards and inheritance
 
 ### Multiple subscribtion
 
-*many namespaces, one callback*
+**many namespaces, one callback**
 ```javascript
 	var number = 0;
 
@@ -160,7 +160,7 @@ JavaScript pubsub implementation with wildcards and inheritance
 	console.log(number); //2
 ```
 
-*one namespace, many callbacks*
+**one namespace, many callbacks**
 ```javascript
 	var number1 = 0;
 	var number2 = 0;
@@ -179,7 +179,7 @@ JavaScript pubsub implementation with wildcards and inheritance
 	console.log(number1 + ',' + number2); //2,4
 ```
 
-*many namespaces, many callbacks*
+**many namespaces, many callbacks**
 ```javascript
 	var number1 = 0;
 	var number2 = 0;
