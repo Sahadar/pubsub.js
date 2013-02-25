@@ -2,6 +2,7 @@ pubsub.js
 =========
 
 JavaScript pubsub implementation with wildcards and inheritance
+[NPM pubsub.js link](https://npmjs.org/package/pubsub.js)
 
 ## Features
 
@@ -201,6 +202,10 @@ JavaScript pubsub implementation with wildcards and inheritance
 	pubsub.publish('goodbye/world');
 	console.log(number1 + ',' + number2); //2,4
 ```
+
+## Installation
+* download from github
+* type `npm install pubsub.js` 
 
 ## Changelog
 * v1.0.5
