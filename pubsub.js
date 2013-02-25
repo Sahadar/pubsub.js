@@ -30,6 +30,62 @@
 		}
 	}
 
+	function subscribe(ns_string, callback, givenObject) {
+		var that = this,
+			parts = ns_string.split(that.options.separator),
+			nsObject, //Namespace object to which we attach event
+			givenObjectSet = (givenObject) ? true : false,
+			givenObject = (givenObjectSet) ? givenObject : callback,
+			eventObject = null,
+			i = 0;
+
+		//Iterating through _eventObject to find proper nsObject
+		nsObject = _eventObject;
+		for (i = 0; i < parts.length; i += 1) {
+			if (typeof nsObject[parts[i]] === "undefined") {
+				nsObject[parts[i]] = {};
+				nsObject[parts[i]]['_events'] = [];
+			}
+			nsObject = nsObject[parts[i]];
+		}
+		
+		eventObject = {
+			callback	: callback,
+			object		: givenObject // "this" parameter in executed function
+		};
+
+		nsObject['_events'].push(eventObject);
+		return {namespace : parts.join(that.options.separator),
+			event : eventObject };
+	}
+
+	function unsubscribe (subscribeObject) {
+		var that = this,
+			ns_string = subscribeObject['namespace'],
+			eventObject = subscribeObject['event'],
+			parts = ns_string.split(that.options.separator),
+			nsObject,
+			i = 0;
+		
+		//Iterating through _eventObject to find proper nsObject
+		nsObject = _eventObject;
+		for (i = 0; i < parts.length; i += 1) {
+			if (typeof nsObject[parts[i]] === "undefined") {
+				if(that.options.log) {
+					console.error('There is no ' + ns_string + ' subscription');
+				}
+				return null;
+			}
+			nsObject = nsObject[parts[i]];
+		}
+		
+		forEach(nsObject['_events'], function(eventId){
+	        if(nsObject['_events'][eventId] === eventObject) {
+	        	nsObject['_events'].splice(eventId, 1);
+	        }
+	    });
+	}
+
 	var pubsub = {
 		options : {
 			separator : '/',
@@ -86,30 +142,25 @@
 		 */
 		subscribe : function(ns_string, callback, givenObject) {
 			var that = this,
-				parts = ns_string.split(that.options.separator),
-				nsObject, //Namespace object to which we attach event
-				givenObjectSet = (givenObject) ? true : false,
-				givenObject = (givenObjectSet) ? givenObject : callback,
-				eventObject = null,
-				i = 0;
-			
-			//Iterating through _eventObject to find proper nsObject
-			nsObject = _eventObject;
-			for (i = 0; i < parts.length; i += 1) {
-				if (typeof nsObject[parts[i]] === "undefined") {
-					nsObject[parts[i]] = {};
-					nsObject[parts[i]]['_events'] = [];
-				}
-				nsObject = nsObject[parts[i]];
-			}
-			
-			eventObject = {
-				callback	: callback,
-				object		: givenObject // "this" parameter in executed function
-			};
+				subscribtions = [];
 
-			nsObject['_events'].push(eventObject);
-			return [parts.join(that.options.separator), eventObject];
+			//if we have array of callbacks - multiple subscribtion
+			if(typeof callback === 'object' && callback instanceof Array) {
+				forEach(callback, function(number) {
+					var oneCallback = callback[number];
+
+					subscribtions =	subscribtions.concat(that.subscribe.apply(that, [ns_string, oneCallback, givenObject]));
+				});
+			} else if(typeof ns_string === 'object' && ns_string instanceof Array) {
+				forEach(ns_string, function(number) {
+					var namespace = ns_string[number];
+
+					subscribtions =	subscribtions.concat(that.subscribe.apply(that, [namespace, callback, givenObject]));
+				});
+			} else {
+				return subscribe.apply(that, arguments);
+			}
+			return subscribtions;
 		},
 		subscribeOnce : function(ns_string, callback, givenObject) {
 			var that = this;
@@ -122,30 +173,18 @@
 			subscribtion = that.subscribe.apply(that, [ns_string, subscribtionCallback, givenObject]);
 		},
 		unsubscribe : function(subscribeObject) {
-			var that = this,
-				ns_string = subscribeObject[0],
-				eventObject = subscribeObject[1],
-				parts = ns_string.split(that.options.separator),
-				nsObject,
-				i = 0;
-			
-			//Iterating through _eventObject to find proper nsObject
-			nsObject = _eventObject;
-			for (i = 0; i < parts.length; i += 1) {
-				if (typeof nsObject[parts[i]] === "undefined") {
-					if(that.options.log) {
-						console.error('There is no ' + ns_string + ' subscription');
-					}
-					return null;
-				}
-				nsObject = nsObject[parts[i]];
+			var that = this;
+
+			//if we have array of callbacks - multiple subscribtion
+			if(subscribeObject instanceof Array) {
+				forEach(subscribeObject, function(number) {
+					var oneSubscribtion = subscribeObject[number];
+
+					unsubscribe.apply(that, [oneSubscribtion]);
+				});
+			} else {
+				unsubscribe.apply(that, arguments);
 			}
-			
-			forEach(nsObject['_events'], function(eventId){
-		        if(nsObject['_events'][eventId] === eventObject) {
-		        	nsObject['_events'].splice(eventId, 1);
-		        }
-		    });
 		}
 	};
 

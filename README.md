@@ -5,16 +5,18 @@ JavaScript pubsub implementation with wildcards and inheritance
 
 ## Features
 
+* Very fast
+* Easy to understand
+* Configurable
 * Dependency free
 * Using native JavaScript code
 * Works on server and browser side smoothly
 * Event inheritance
-* subscribeOnce method
 * Wildcards
+* subscribeOnce method
+* Multiple subscribtions
 * Controll under event bubbling depth
-* Easy to understand
 * Works with require.js library
-* Configurable
 
 ## Examples
 
@@ -135,7 +137,33 @@ JavaScript pubsub implementation with wildcards and inheritance
 	console.log(number); //3
 ```
 
+### Multiple subscribtions
+
+```javascript
+	var number1 = 0;
+	var number2 = 0;
+
+	var subscribtion = pubsub.subscribe(['hello/world', 'goodbye/world'], [function() {
+		number1++;
+	}, function() {
+		number2 += 2;
+	}]);
+
+	pubsub.publish('hello/world');
+	console.log(number1 + ',' + number2); //1,2
+	pubsub.publish('goodbye/world');
+	console.log(number1 + ',' + number2); //2,4
+	pubsub.unsubscribe(subscribtion);
+
+	pubsub.publish('hello/world');
+	console.log(number1 + ',' + number2); //2,4
+	pubsub.publish('goodbye/world');
+	console.log(number1 + ',' + number2); //2,4
+```
+
 ## Changelog
+* v1.0.5
+	* Added multisubscribtion possibilities
 * v1.0.4
 	* Added subscribeOnce method
 * v1.0.3

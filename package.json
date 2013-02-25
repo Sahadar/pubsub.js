@@ -1,7 +1,7 @@
 {
   "name": "pubsub.js",
   "description": "Vanilla JS Pubsub implementation with wildcards and inheritance",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "Wojciech Dłubacz <wdsahadar@gmail.com>",
   "directories" : {
     "lib" : ".",

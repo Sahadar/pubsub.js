@@ -116,3 +116,72 @@ test("Wildcards test (more advanced)", function() {
 	pubsub.unsubscribe(subscribtion3);
 	pubsub.unsubscribe(subscribtion4);
 });
+
+test("Multiple subscribtion1 (one namespace, many callbacks)", function() {
+	var number = 0;
+
+	var subscribtion = pubsub.subscribe('hello/world', [
+		function() {
+			number++;
+		},
+		function() {
+			number++;
+		},
+		function() {
+			number++;
+		}
+	]);
+
+	pubsub.publish('hello/world');
+	ok(number === 3, 'Multiple subscribtion before unsubscribe is working properly');
+	pubsub.unsubscribe(subscribtion);
+
+	pubsub.publish('hello/world');
+	ok(number === 3, 'Multiple subscribtion after unsubscribe is working properly');
+});
+
+
+test("Multiple subscribtion2 (many namespaces, one callback)", function() {
+	var number = 0;
+
+	var subscribtion = pubsub.subscribe(['hello/world', 'goodbye/world'], function() {
+		number++;
+	});
+
+	pubsub.publish('hello/world');
+	ok(number === 1, 'Subscribtion to hello/world before unsubscribe is working properly');
+	pubsub.publish('goodbye/world');
+	ok(number === 2, 'Subscribtion to goodbye/world before unsubscribe is working properly');
+	pubsub.unsubscribe(subscribtion);
+
+	pubsub.publish('hello/world');
+	ok(number === 2, 'Subscribtion to hello/world after unsubscribe is working properly');
+	pubsub.publish('goodbye/world');
+	ok(number === 2, 'Subscribtion to goodbye/world after unsubscribe is working properly');
+});
+
+test("Multiple subscribtion3 (many namespaces, many callbacks)", function() {
+	var number1 = 0;
+	var number2 = 0;
+
+	var subscribtion = pubsub.subscribe(['hello/world', 'goodbye/world'], [function() {
+		number1++;
+	}, function() {
+		number2+=2;
+	}]);
+
+	pubsub.publish('hello/world');
+	ok(number1 === 1, 'Subscribtion to hello/world before unsubscribe is working properly (number1)');
+	ok(number2 === 2, 'Subscribtion to hello/world before unsubscribe is working properly (number2)');
+	pubsub.publish('goodbye/world');
+	ok(number1 === 2, 'Subscribtion to goodbye/world before unsubscribe is working properly (number1)');
+	ok(number2 === 4, 'Subscribtion to goodbye/world before unsubscribe is working properly (number2)');
+	pubsub.unsubscribe(subscribtion);
+
+	pubsub.publish('hello/world');
+	ok(number1 === 2, 'Subscribtion to hello/world after unsubscribe is working properly (number1)');
+	ok(number2 === 4, 'Subscribtion to hello/world after unsubscribe is working properly (number2)');
+	pubsub.publish('goodbye/world');
+	ok(number1 === 2, 'Subscribtion to goodbye/world after unsubscribe is working properly (number1)');
+	ok(number2 === 4, 'Subscribtion to goodbye/world after unsubscribe is working properly (number2)');
+});
