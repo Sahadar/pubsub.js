@@ -137,7 +137,7 @@ JavaScript pubsub implementation with wildcards and inheritance
 	console.log(number); //3
 ```
 
-### Multiple subscribtions
+### Multiple subscribtion
 
 ```javascript
 	var number1 = 0;
