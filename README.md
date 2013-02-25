@@ -17,6 +17,7 @@ JavaScript pubsub implementation with wildcards and inheritance
 * Multiple subscribtions
 * Controll under event bubbling depth
 * Works with require.js library
+* Written with TDD
 
 ## Examples
 
@@ -139,6 +140,46 @@ JavaScript pubsub implementation with wildcards and inheritance
 
 ### Multiple subscribtion
 
+*many namespaces, one callback*
+```javascript
+	var number = 0;
+
+	var subscribtion = pubsub.subscribe(['hello/world', 'goodbye/world'], function() {
+		number++;
+	});
+
+	pubsub.publish('hello/world');
+	console.log(number); //1
+	pubsub.publish('goodbye/world');
+	console.log(number); //2
+	pubsub.unsubscribe(subscribtion);
+
+	pubsub.publish('hello/world');
+	console.log(number); //2
+	pubsub.publish('goodbye/world');
+	console.log(number); //2
+```
+
+*one namespace, many callbacks*
+```javascript
+	var number1 = 0;
+	var number2 = 0;
+
+	var subscribtion = pubsub.subscribe('hello/world', [function() {
+		number1++;
+	}, function() {
+		number2 += 2;
+	}]);
+
+	pubsub.publish('hello/world');
+	console.log(number1 + ',' + number2); //1,2
+	pubsub.unsubscribe(subscribtion);
+
+	pubsub.publish('hello/world');
+	console.log(number1 + ',' + number2); //2,4
+```
+
+*many namespaces, many callbacks*
 ```javascript
 	var number1 = 0;
 	var number2 = 0;
