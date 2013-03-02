@@ -22,6 +22,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 * Controll under event bubbling depth
 * Works with require.js library
 * Written with TDD
+* Works also on IE 6+
 
 ## Examples
 
