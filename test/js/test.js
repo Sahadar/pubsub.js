@@ -55,7 +55,6 @@ test("Method: subscribeOnce test (with param)", function() {
 	});
 	pubsub.publish('hello/world', ['hello']);
 	pubsub.publish('hello/world', ['world']);
-	console.log(done);
 	ok(done === 'hello', 'Done has proper value');
 	ok(iterator === 1, 'Subscribtion executed only once');
 });
