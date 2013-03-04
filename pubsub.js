@@ -1,5 +1,5 @@
-'use strict';
 (function(scope) {
+	'use strict';
 	var _eventObject = {};
 
 	function forEach(dataArray, callback) {
@@ -12,10 +12,14 @@
 	}
 
 	function executeCallback(subscribtions, args) {
-		forEach(subscribtions, function(subscribtionId) {
+		//clone array - callbacks can unsubscribe other subscribtions
+		var executedSubscribtions = subscribtions.slice();
+
+		forEach(executedSubscribtions, function(subscribtionId) {
 			var subscribtion = null;
-			if(typeof subscribtions[subscribtionId] === 'object' && subscribtions.hasOwnProperty(subscribtionId)) {
-				subscribtion = subscribtions[subscribtionId];	
+
+			if(typeof executedSubscribtions[subscribtionId] === 'object' && executedSubscribtions.hasOwnProperty(subscribtionId)) {
+				subscribtion = executedSubscribtions[subscribtionId];
 				subscribtion.callback.apply(subscribtion.object, args);
 			}
 		});
@@ -64,9 +68,9 @@
 			ns_string = subscribeObject['namespace'],
 			eventObject = subscribeObject['event'],
 			parts = ns_string.split(that.options.separator),
-			nsObject,
+			nsObject, 
 			i = 0;
-		
+
 		//Iterating through _eventObject to find proper nsObject
 		nsObject = _eventObject;
 		for (i = 0; i < parts.length; i += 1) {
