@@ -218,6 +218,8 @@ Default pubsub.js configuration:
 ```
 
 ## Changelog
+* v1.0.6
+	* Fixed bug with unsubscribtion - nsubscribtion during publish of the same namespace (test case 3)
 * v1.0.5
 	* Added multisubscribtion possibilities
 * v1.0.4
