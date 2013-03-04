@@ -2,6 +2,7 @@ test("Presence test", function() {
 	ok(typeof pubsub === 'object' && pubsub != null, "pubsub present");
 	ok(typeof pubsub.publish === 'function', "pubsub has method publish");
 	ok(typeof pubsub.subscribe === 'function', "pubsub has method subscribe");
+	ok(typeof pubsub.subscribeOnce === 'function', "pubsub has method subscribeOnce");
 	ok(typeof pubsub.unsubscribe === 'function', "pubsub has method unsubscribe");
 });
 
@@ -21,6 +22,22 @@ test("Unsubscribe test (basic)", function() {
 	pubsub.unsubscribe(subscribtion);
 	pubsub.publish('hello/world4', [null, null]);
 	ok(values.param1 === param1 && values.param2 === param2, 'Values has proper value');
+});
+
+test("Unsubscribe test (chained unsubscribe)", function() {
+	var iterator = 0;
+
+	var subscribtion1 = pubsub.subscribe('hello/world1', function() {
+		iterator++;
+		pubsub.unsubscribe(subscribtion1);
+	});
+	var subscribtion2 = pubsub.subscribe('hello/world1', function() {
+		iterator++;
+	});
+
+	pubsub.publish('hello/world1');
+	ok(iterator === 2, 'Second subscribtion executed properly');
+	pubsub.unsubscribe(subscribtion2);
 });
 
 test("Publish test (basic)", function() {
