@@ -5,6 +5,8 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 
 [NPM pubsub.js link](https://npmjs.org/package/pubsub.js)
 
+[pubsub.js performance test](http://jsperf.com/pubsub-js-vs-jquery-events)
+
 ## Features
 
 * Very fast
@@ -20,6 +22,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 * Controll under event bubbling depth
 * Works with require.js library
 * Written with TDD
+* Works also on IE 6+
 
 ## Examples
 
