@@ -104,7 +104,6 @@
 		}
 
 		return {
-			constructor : Pubsub,
 			/**
 			 * Publish event
 			 * @param ns_string string namespace string splited by dots
@@ -198,6 +197,9 @@
 				} else {
 					unsubscribe.apply(that, arguments);
 				}
+			},
+			getNewInstance : function(config) {
+				return new Pubsub(config);
 			}
 		} //return block
 	}

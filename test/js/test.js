@@ -202,13 +202,12 @@ test("Multiple subscribtion3 (many namespaces, many callbacks)", function() {
 	ok(number2 === 4, 'Subscribtion to goodbye/world after unsubscribe is working properly (number2)');
 });
 
-test("Pubsub constructor with own namespaces scope", function() {
-	ok(typeof pubsub.constructor === 'function', "pubsub has method constructor");
+test("Pubsub getNewInstance with own namespaces scope", function() {
+	ok(typeof pubsub.getNewInstance === 'function', "pubsub has method getNewInstance");
 	var number1 = 0;
 	var number2 = 0;
 
-	console.log(pubsub);
-	var privatePubsub = new pubsub.constructor();
+	var privatePubsub = new pubsub.getNewInstance();
 	
 	var subscribtion = pubsub.subscribe('hello/world', function() {
 		number1++;
