@@ -239,12 +239,14 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 
 	var privatePubsub = pubsub.newInstance();
 	
-	var subscribtion = pubsub.subscribe('hello/world', function() {
+	pubsub.subscribe('hello/world', function() {
 		number1++;
 	});
-	var privateSubscribtion = privatePubsub.subscribe('hello/world', function() {
+	
+	privatePubsub.subscribe('hello/world', function() {
 		number2++;
 	});
+	
 	pubsub.publish('hello/world');
 	console.log(number1 + ',' + number2); //1,0
 
