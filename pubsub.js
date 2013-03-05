@@ -4,6 +4,9 @@
 
 	if(typeof pubsub === 'object') {
 		pubsubConfig = pubsub;
+	//node.js config from global
+	} else if(typeof global === 'object' && typeof global.pubsubConfig === 'object') {
+		pubsubConfig = global.pubsubConfig;
 	}
 
 	'use strict';
@@ -198,7 +201,7 @@
 					unsubscribe.apply(that, arguments);
 				}
 			},
-			getNewInstance : function(config) {
+			newInstance : function(config) {
 				return new Pubsub(config);
 			}
 		} //return block
@@ -210,6 +213,7 @@
 		define(pubsubInstance);
 	}
 
+	//node.js
 	if(typeof module === 'object' && module.exports) {
 		module.exports = pubsubInstance;
 	}

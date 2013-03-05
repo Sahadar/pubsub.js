@@ -70,17 +70,38 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 
 ### Changing default configuration
 
+**Before pubsub script loader** - make global variable named "pubsub" with your default configuration
 ```javascript
-	pubsub.options.separator = '.';
-
+	pubsub = {
+		separator : '.'
+	}
+```
+**After pubsub load - use it with your configuration, pubsub.js will replace that previous "pubsub" global variable with ist own instance**
+```javascript
 	//subscribe to 'hello.world' namespace
-	pubsub.subscribe('hello.world', function(data) { //event namespace separated by dots
-		console.log(data);
+	var subscribtion = pubsub.subscribe('hello.world', function() {
+		console.log('hello world!');
 	});
 	//publish event on 'hello.world' namespace
-	pubsub.publish('hello.world', ['hello!']); // second parameter is an array of arguments
-	//prints "hello!" inside console
+	pubsub.publish('hello.world');
+	//prints "hello world" inside console
+
+	//unsubscribe
+	pubsub.unsubscribe(subscribtion);
+	//publish event on 'hello.world' namespace
+	pubsub.publish('hello.world');
+	//nothing happen - we've previously unsubscribed that subscribtion
 ```
+
+***Node.js***
+**Before pubsub require execution** - set global.pubsubConfig variable
+```javascript
+	global.pubsubConfig = {
+		separator : '.'
+	}
+```
+**After pubsub load, it'll have your configuration as in browser example**
+
 
 ### Event inheritance
 
@@ -207,6 +228,26 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	console.log(number1 + ',' + number2); //2,4
 ```
 
+###making new instances with own namespaces scope
+```javascript
+	var number1 = 0;
+	var number2 = 0;
+
+	var privatePubsub = pubsub.newInstance();
+	
+	var subscribtion = pubsub.subscribe('hello/world', function() {
+		number1++;
+	});
+	var privateSubscribtion = privatePubsub.subscribe('hello/world', function() {
+		number2++;
+	});
+	pubsub.publish('hello/world');
+	console.log(number1 + ',' + number2); //1,0
+
+	privatePubsub.publish('hello/world');
+	console.log(number1 + ',' + number2); //1,1
+```
+
 ## Installation
 Download from github or type `npm install pubsub.js`
 
@@ -218,6 +259,8 @@ Default pubsub.js configuration:
 ```
 
 ## Changelog
+* v1.1.0
+	* reworked core, changed the way of setting own config, implemented "newInstance" method
 * v1.0.6
 	* Fixed bug with unsubscribtion - subscribtion during publish of the same namespace (test case 3)
 * v1.0.5

@@ -202,12 +202,12 @@ test("Multiple subscribtion3 (many namespaces, many callbacks)", function() {
 	ok(number2 === 4, 'Subscribtion to goodbye/world after unsubscribe is working properly (number2)');
 });
 
-test("Pubsub getNewInstance with own namespaces scope", function() {
-	ok(typeof pubsub.getNewInstance === 'function', "pubsub has method getNewInstance");
+test("Pubsub newInstance with own namespaces scope", function() {
+	ok(typeof pubsub.newInstance === 'function', "pubsub has method newInstance");
 	var number1 = 0;
 	var number2 = 0;
 
-	var privatePubsub = new pubsub.getNewInstance();
+	var privatePubsub = pubsub.newInstance();
 	
 	var subscribtion = pubsub.subscribe('hello/world', function() {
 		number1++;
@@ -221,6 +221,33 @@ test("Pubsub getNewInstance with own namespaces scope", function() {
 	ok(number1 === 1 && number2 === 1, "Private pubsub publish worked properly");
 	privatePubsub.unsubscribe(privateSubscribtion);
 	privatePubsub.publish('hello/world');
+	ok(number1 === 1 && number2 === 1, "Private unsubscribe worked properly");
+	pubsub.unsubscribe(subscribtion);
+	pubsub.publish('hello/world');
+	ok(number1 === 1 && number2 === 1, "Public unsubscribe worked properly");
+});
+
+test("Switching config", function() {
+	ok(typeof pubsub.newInstance === 'function', "pubsub has method newInstance");
+	var number1 = 0;
+	var number2 = 0;
+
+	var privatePubsub = pubsub.newInstance({
+		separator : '.'
+	});
+	
+	var subscribtion = pubsub.subscribe('hello/world', function() {
+		number1++;
+	});
+	var privateSubscribtion = privatePubsub.subscribe('hello.world', function() {
+		number2++;
+	});
+	pubsub.publish('hello/world');
+	ok(number1 === 1 && number2 === 0, "Global pubsub publish worked properly");
+	privatePubsub.publish('hello.world');
+	ok(number1 === 1 && number2 === 1, "Private pubsub publish worked properly");
+	privatePubsub.unsubscribe(privateSubscribtion);
+	privatePubsub.publish('hello.world');
 	ok(number1 === 1 && number2 === 1, "Private unsubscribe worked properly");
 	pubsub.unsubscribe(subscribtion);
 	pubsub.publish('hello/world');
