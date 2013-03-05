@@ -79,7 +79,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 		separator : '.'
 	}
 ```
-**After pubsub load - use it with your configuration, pubsub.js will replace that previous "pubsub" global variable with ist own instance**
+**After pubsub load - use it with your configuration, pubsub.js will replace that previous "pubsub" global variable with its own instance**
 ```javascript
 	//subscribe to 'hello.world' namespace
 	var subscribtion = pubsub.subscribe('hello.world', function() {
