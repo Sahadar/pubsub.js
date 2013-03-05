@@ -22,6 +22,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 * Controll under event bubbling depth
 * Works with require.js library
 * Written with TDD
+* Possibility to make new instances of pubsub with private namespaces scope
 * Works also on IE 6+
 
 ## Examples
@@ -70,6 +71,8 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 
 ### Changing default configuration
 
+***Browser***
+
 **Before pubsub script loader** - make global variable named "pubsub" with your default configuration
 ```javascript
 	pubsub = {
@@ -94,6 +97,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 ```
 
 ***Node.js***
+
 **Before pubsub require execution** - set global.pubsubConfig variable
 ```javascript
 	global.pubsubConfig = {
