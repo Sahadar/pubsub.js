@@ -23,6 +23,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 * Works with require.js library
 * Written with TDD
 * Possibility to make new instances of pubsub with private namespaces scope
+* Compiled + gzipped weight only 1kB
 * Works also on IE 6+
 
 ## Examples
@@ -266,7 +267,9 @@ Default pubsub.js configuration:
 
 ## Changelog
 * v1.1.0
-	* reworked core, changed the way of setting own config, implemented "newInstance" method
+	* reworked core
+	* changed the way of setting own config
+	* implemented "newInstance" method
 * v1.0.6
 	* Fixed bug with unsubscribtion - subscribtion during publish of the same namespace (test case 3)
 * v1.0.5
