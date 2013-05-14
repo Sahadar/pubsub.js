@@ -23,6 +23,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 * Works with require.js library
 * Written with TDD
 * Possibility to make new instances of pubsub with private namespaces scope
+* Possibility to publish async events
 * Compiled + gzipped weight only 1kB
 * Works also on IE 6+
 
@@ -283,6 +284,7 @@ Default pubsub.js configuration:
 ```javascript
 	separator : '/' //defined namespace separator
 	recurrent : false // defines inheritance of publish event
+	async 	  : false // if true - publish events will be asynchronous
 	log       : false // set to true will log unsubscribed namespaces to which You publish event
 ```
 
