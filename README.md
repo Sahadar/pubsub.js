@@ -257,7 +257,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	console.log(number1 + ',' + number2); //1,1
 ```
 
-###Using pubsub asynchronously
+**Using pubsub asynchronously**
 ```javascript
 	var number1 = 0;
 
