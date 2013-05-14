@@ -28,17 +28,17 @@
 			}
 		}
 
-		function executeCallback(subscribtions, args, async) {
+		function executeCallback(subscriptions, args, async) {
 			var async = (typeof async === 'boolean') ?  async : options.async;
 
-			//clone array - callbacks can unsubscribe other subscribtions
-			var executedSubscribtions = subscribtions.slice();
+			//clone array - callbacks can unsubscribe other subscriptions
+			var executedSubscriptions = subscriptions.slice();
 
-			forEach(executedSubscribtions, function(subscribtionId) {
+			forEach(executedSubscriptions, function(subscribtionId) {
 				var subscribtion = null;
 
-				if(typeof executedSubscribtions[subscribtionId] === 'object' && executedSubscribtions.hasOwnProperty(subscribtionId)) {
-					subscribtion = executedSubscribtions[subscribtionId];
+				if(typeof executedSubscriptions[subscribtionId] === 'object' && executedSubscriptions.hasOwnProperty(subscribtionId)) {
+					subscribtion = executedSubscriptions[subscribtionId];
 					if(async) {
 						setTimeout(function() {
 							subscribtion.callback.apply(subscribtion.object, args);
@@ -168,25 +168,25 @@
 			 */
 			subscribe : function(ns_string, callback, givenObject) {
 				var that = this,
-					subscribtions = [];
+					subscriptions = [];
 
 				//if we have array of callbacks - multiple subscribtion
 				if(typeof callback === 'object' && callback instanceof Array) {
 					forEach(callback, function(number) {
 						var oneCallback = callback[number];
 
-						subscribtions =	subscribtions.concat(that.subscribe.apply(that, [ns_string, oneCallback, givenObject]));
+						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [ns_string, oneCallback, givenObject]));
 					});
 				} else if(typeof ns_string === 'object' && ns_string instanceof Array) {
 					forEach(ns_string, function(number) {
 						var namespace = ns_string[number];
 
-						subscribtions =	subscribtions.concat(that.subscribe.apply(that, [namespace, callback, givenObject]));
+						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [namespace, callback, givenObject]));
 					});
 				} else {
 					return subscribe.apply(that, arguments);
 				}
-				return subscribtions;
+				return subscriptions;
 			},
 			subscribeOnce : function(ns_string, callback, givenObject) {
 				var that = this;
