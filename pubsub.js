@@ -1,4 +1,5 @@
 (function(scope) {
+	'use strict';
 	var pubsubInstance = null;
 	var pubsubConfig = null;
 
@@ -9,15 +10,15 @@
 		pubsubConfig = global.pubsubConfig;
 	}
 
-	'use strict';
 	function Pubsub(config) {
 		var _eventObject = {};
 		var options = {
 			separator : (config && config.separator) ?  config.separator : '/',
-			recurrent : (config && config.recurrent) ?  config.recurrent :  (false),
+			recurrent : (config && typeof config.recurrent === 'boolean') ?  config.recurrent :  (false),
+			async 	  : (config && typeof config.async === 'boolean') ?  config.async :  (false),
 			log       : (config && config.log) ?  config.log :  (false)
 		};
-		
+
 		function forEach(dataArray, callback) {
 			var i = 0,
 				arrayLength = dataArray.length;
@@ -27,7 +28,9 @@
 			}
 		}
 
-		function executeCallback(subscribtions, args) {
+		function executeCallback(subscribtions, args, async) {
+			var async = (typeof async === 'boolean') ?  async : options.async;
+
 			//clone array - callbacks can unsubscribe other subscribtions
 			var executedSubscribtions = subscribtions.slice();
 
@@ -36,7 +39,13 @@
 
 				if(typeof executedSubscribtions[subscribtionId] === 'object' && executedSubscribtions.hasOwnProperty(subscribtionId)) {
 					subscribtion = executedSubscribtions[subscribtionId];
-					subscribtion.callback.apply(subscribtion.object, args);
+					if(async) {
+						setTimeout(function() {
+							subscribtion.callback.apply(subscribtion.object, args);
+						});
+					} else {
+						subscribtion.callback.apply(subscribtion.object, args);
+					}
 				}
 			});
 		}
@@ -114,10 +123,12 @@
 			 * @param recurrent bool should execution be bubbled throught namespace
 			 * @param depth integer how many namespaces separated by dots will be executed
 			 */
-			publish : function(ns_string, args, recurrent, depth) {
+			publish : function(ns_string, args, params) {
 				var that = this,
 					parts = ns_string.split(options.separator),
-					recurrent = recurrent || options.recurrent, // bubbles event throught namespace if true
+					recurrent = (typeof params === 'object' && params.recurrent) ? params.recurrent : options.recurrent, // bubbles event throught namespace if true
+					depth = (typeof params === 'object' && params.depth) ? params.depth : null,
+					async = (typeof params === 'object' && params.async) ? params.async : options.async,
 					nsObject, //Namespace object to which we attach event
 					args = (args) ? args : [],
 					partsLength = parts.length,
@@ -128,7 +139,7 @@
 				for (i = 0; i < partsLength; i++) {
 					iPart = parts[i];
 					if(iPart === '*') {
-						executeWildcard(nsObject, args);
+						executeWildcard(nsObject, args, async);
 						return null;
 					} else if (typeof nsObject[iPart] === "undefined") {
 						if(options.log) {
@@ -139,14 +150,14 @@
 					nsObject = nsObject[iPart];
 					
 					if(recurrent === true && typeof depth !== 'number') { //depth is not defined
-						executeCallback(nsObject['_events'], args);
+						executeCallback(nsObject['_events'], args, async);
 					} else if(recurrent === true && typeof depth === 'number' && i >= partsLength - depth) { //if depth is defined
-						executeCallback(nsObject['_events'], args);
+						executeCallback(nsObject['_events'], args, async);
 					}
 				}
 				
 				if(recurrent === false) {
-					executeCallback(nsObject['_events'], args);
+					executeCallback(nsObject['_events'], args, async);
 				}
 			},
 			/**

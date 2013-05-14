@@ -103,7 +103,9 @@ test("Inheritance test (basic)", function() {
 			'param2' : param2
 		};
 	});
-	pubsub.publish('hello/world5', [param1, param2], true);
+	pubsub.publish('hello/world5', [param1, param2], {
+		recurrent : true
+	});
 	ok(values.param1 === param1 && values.param2 === param2, 'Values has proper value');
 	pubsub.unsubscribe(subscribtion);
 });
@@ -252,4 +254,42 @@ test("Switching config", function() {
 	pubsub.unsubscribe(subscribtion);
 	pubsub.publish('hello/world');
 	ok(number1 === 1 && number2 === 1, "Public unsubscribe worked properly");
+});
+
+asyncTest("Async pubsub test (differences)", function() {
+	ok(typeof pubsub.newInstance === 'function', "pubsub has method newInstance");
+	var number1 = 0;
+
+	var asyncPubsub = pubsub.newInstance({
+		async : true
+	});
+	
+	asyncPubsub.subscribeOnce('hello/world', function() {
+		number1++;
+		
+		ok(number1 === 2, "Async pubsub publish worked properly");
+		start();
+	});
+
+	asyncPubsub.publish('hello/world', []);
+	number1++;
+	ok(number1 === 1, "Async pubsub publish worked properly");
+});
+
+asyncTest("Sync pubsub test (differences)", function() {
+	ok(typeof pubsub.newInstance === 'function', "pubsub has method newInstance");
+	var number1 = 0;
+
+	var syncPubsub = pubsub.newInstance();
+	
+	syncPubsub.subscribeOnce('hello/world', function() {
+		number1++;
+		
+		ok(number1 === 1, "Sync pubsub publish worked properly");
+		start();
+	});
+
+	syncPubsub.publish('hello/world', []);
+	number1++;
+	ok(number1 === 2, "Sync pubsub publish worked properly");
 });

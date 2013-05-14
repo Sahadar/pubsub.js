@@ -116,7 +116,9 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 		console.log('hello world!');
 	});
 	//publish event on 'hello/world' namespace
-	pubsub.publish('hello/world', true);
+	pubsub.publish('hello/world', [], {
+		recurrent : true
+	});
 	//prints "hello world" inside console
 	//first event goes to "hello" namespace
 	//then it tries to execute on "hello/world" but nothing is listening on it
@@ -255,6 +257,25 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	console.log(number1 + ',' + number2); //1,1
 ```
 
+###Using pubsub asynchronously
+```javascript
+	var number1 = 0;
+
+	var asyncPubsub = pubsub.newInstance({
+		async : true
+	});
+	
+	asyncPubsub.subscribeOnce('hello/world', function() {
+		number1++;
+		console.log(number1); //2
+	});
+
+	asyncPubsub.publish('hello/world'); // asynchronous call to 'hello/world'
+	
+	number1++;
+	console.log(number1); //1
+```
+
 ## Installation
 Download from github or type `npm install pubsub.js`
 
@@ -266,6 +287,9 @@ Default pubsub.js configuration:
 ```
 
 ## Changelog
+* v1.2.0
+	* Changed the way of using event inheritance - API changes to publish method!
+	* Added possibility to use "publish" asynchronously
 * v1.1.0
 	* reworked core
 	* changed the way of setting own config
