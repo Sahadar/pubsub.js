@@ -42,7 +42,7 @@
 					if(async) {
 						setTimeout(function() {
 							subscribtion.callback.apply(subscribtion.object, args);
-						});
+						}, 4);
 					} else {
 						subscribtion.callback.apply(subscribtion.object, args);
 					}
