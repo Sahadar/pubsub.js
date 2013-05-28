@@ -15,7 +15,7 @@
 		var options = {
 			separator : (config && config.separator) ?  config.separator : '/',
 			recurrent : (config && typeof config.recurrent === 'boolean') ?  config.recurrent :  (false),
-			async 	  : (config && typeof config.async === 'boolean') ?  config.async :  (false),
+			async     : (config && typeof config.async === 'boolean') ?  config.async :  (false),
 			log       : (config && config.log) ?  config.log :  (false)
 		};
 
@@ -29,7 +29,7 @@
 		}
 
 		function executeCallback(subscriptions, args, async) {
-			var async = (typeof async === 'boolean') ?  async : options.async;
+			async = (typeof async === 'boolean') ?  async : options.async;
 
 			//clone array - callbacks can unsubscribe other subscriptions
 			var executedSubscriptions = subscriptions.slice();
@@ -54,46 +54,45 @@
 			var nsElement;
 			for(nsElement in nsObject) {
 				if(nsElement !== '_events' && nsObject.hasOwnProperty(nsElement)) {
-					executeCallback(nsObject[nsElement]['_events'], args);
+					executeCallback(nsObject[nsElement]._events, args);
 				}
 			}
 		}
 
 		function subscribe(ns_string, callback, givenObject) {
-			var that = this,
-				parts = ns_string.split(options.separator),
+			var parts = ns_string.split(options.separator),
 				nsObject, //Namespace object to which we attach event
 				givenObjectSet = (givenObject) ? true : false,
-				givenObject = (givenObjectSet) ? givenObject : callback,
 				eventObject = null,
 				i = 0;
+
+			givenObject = (givenObjectSet) ? givenObject : callback;
 
 			//Iterating through _eventObject to find proper nsObject
 			nsObject = _eventObject;
 			for (i = 0; i < parts.length; i += 1) {
 				if (typeof nsObject[parts[i]] === "undefined") {
 					nsObject[parts[i]] = {};
-					nsObject[parts[i]]['_events'] = [];
+					nsObject[parts[i]]._events = [];
 				}
 				nsObject = nsObject[parts[i]];
 			}
-			
+
 			eventObject = {
 				callback	: callback,
 				object		: givenObject // "this" parameter in executed function
 			};
 
-			nsObject['_events'].push(eventObject);
+			nsObject._events.push(eventObject);
 			return {namespace : parts.join(options.separator),
 				event : eventObject };
 		}
 
 		function unsubscribe (subscribeObject) {
-			var that = this,
-				ns_string = subscribeObject['namespace'],
-				eventObject = subscribeObject['event'],
+			var ns_string = subscribeObject.namespace,
+				eventObject = subscribeObject.event,
 				parts = ns_string.split(options.separator),
-				nsObject, 
+				nsObject,
 				i = 0;
 
 			//Iterating through _eventObject to find proper nsObject
@@ -107,12 +106,12 @@
 				}
 				nsObject = nsObject[parts[i]];
 			}
-			
-			forEach(nsObject['_events'], function(eventId){
-		        if(nsObject['_events'][eventId] === eventObject) {
-		        	nsObject['_events'].splice(eventId, 1);
-		        }
-		    });
+
+			forEach(nsObject._events, function(eventId){
+				if(nsObject._events[eventId] === eventObject) {
+					nsObject._events.splice(eventId, 1);
+				}
+			});
 		}
 
 		return {
@@ -130,10 +129,11 @@
 					depth = (typeof params === 'object' && params.depth) ? params.depth : null,
 					async = (typeof params === 'object' && params.async) ? params.async : options.async,
 					nsObject, //Namespace object to which we attach event
-					args = (args) ? args : [],
 					partsLength = parts.length,
 					iPart = null,
 					i;
+
+				args = (args) ? args : [],
 
 				nsObject = _eventObject;
 				for (i = 0; i < partsLength; i++) {
@@ -148,16 +148,16 @@
 						return null;
 					}
 					nsObject = nsObject[iPart];
-					
+
 					if(recurrent === true && typeof depth !== 'number') { //depth is not defined
-						executeCallback(nsObject['_events'], args, async);
+						executeCallback(nsObject._events, args, async);
 					} else if(recurrent === true && typeof depth === 'number' && i >= partsLength - depth) { //if depth is defined
-						executeCallback(nsObject['_events'], args, async);
+						executeCallback(nsObject._events, args, async);
 					}
 				}
-				
+
 				if(recurrent === false) {
-					executeCallback(nsObject['_events'], args, async);
+					executeCallback(nsObject._events, args, async);
 				}
 			},
 			/**
@@ -215,7 +215,7 @@
 			newInstance : function(config) {
 				return new Pubsub(config);
 			}
-		} //return block
+		}; //return block
 	}
 	pubsubInstance = new Pubsub(pubsubConfig);
 
