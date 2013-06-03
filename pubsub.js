@@ -80,7 +80,7 @@
 
 			eventObject = {
 				callback	: callback,
-				object		: givenObject // "this" parameter in executed function
+				object  	: givenObject // "this" parameter in executed function
 			};
 
 			nsObject._events.push(eventObject);
@@ -119,8 +119,9 @@
 			 * Publish event
 			 * @param nsString string namespace string splited by dots
 			 * @param args array of arguments given to callbacks
-			 * @param recurrent bool should execution be bubbled throught namespace
-			 * @param depth integer how many namespaces separated by dots will be executed
+			 * @param params paramaters possible:
+			 *        @param recurrent bool should execution be bubbled throught namespace
+			 *        @param depth integer how many namespaces separated by dots will be executed
 			 */
 			publish : function(nsString, args, params) {
 				var that = this,
@@ -188,6 +189,12 @@
 				}
 				return subscriptions;
 			},
+			/**
+			 * subscribeOnce event - subscribe once to some event, then unsubscribe immadiately
+			 * @param nsString string namespace string splited by dots
+			 * @param callback function function executed after publishing event
+			 * @param givenObject object/nothing Optional object which will be used as "this" in callback
+			 */
 			subscribeOnce : function(nsString, callback, givenObject) {
 				var that = this;
 				var subscribtion = null;
@@ -198,6 +205,10 @@
 
 				subscribtion = that.subscribe.apply(that, [nsString, subscribtionCallback, givenObject]);
 			},
+			/**
+			 * Unsubscribe from given subscribtion
+			 * @param subscribeObject subscribtion object given on subscribe (returned from subscribtion)
+			 */
 			unsubscribe : function(subscribeObject) {
 				var that = this;
 
@@ -212,6 +223,14 @@
 					unsubscribe.apply(that, arguments);
 				}
 			},
+			/**
+			 * newInstance - makes new instance of pubsub object with its own config
+			 * @param config instance configuration
+			 *        @param separator separator (default is "/")
+			 *        @param recurrent should publish events be bubbled through namespace
+			 *        @param async should publish events be asynchronous - not blocking function execution
+			 *        @param log console.warn/error every problem
+			 */
 			newInstance : function(config) {
 				return new Pubsub(config);
 			}
