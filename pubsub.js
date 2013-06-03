@@ -59,14 +59,14 @@
 			}
 		}
 
-		function subscribe(nsString, callback, givenObject) {
+		function subscribe(nsString, callback, contextObject) {
 			var parts = nsString.split(options.separator),
 				nsObject, //Namespace object to which we attach event
-				givenObjectSet = (givenObject) ? true : false,
+				givenObjectSet = (contextObject) ? true : false,
 				eventObject = null,
 				i = 0;
 
-			givenObject = (givenObjectSet) ? givenObject : callback;
+			contextObject = (givenObjectSet) ? contextObject : callback;
 
 			//Iterating through _eventObject to find proper nsObject
 			nsObject = _eventObject;
@@ -80,7 +80,7 @@
 
 			eventObject = {
 				callback	: callback,
-				object  	: givenObject // "this" parameter in executed function
+				object  	: contextObject // "this" parameter in executed function
 			};
 
 			nsObject._events.push(eventObject);
@@ -165,10 +165,12 @@
 			 * Subscribe event
 			 * @param nsString string namespace string splited by dots
 			 * @param callback function function executed after publishing event
-			 * @param givenObject object/nothing Optional object which will be used as "this" in callback
+			 * @param params given params
+			 *		@param context object/nothing Optional object which will be used as "this" in callback
 			 */
-			subscribe : function(nsString, callback, givenObject) {
+			subscribe : function(nsString, callback, params) {
 				var that = this,
+					context = (params && typeof params.context !== 'undefined') ? params.context : null,
 					subscriptions = [];
 
 				//if we have array of callbacks - multiple subscribtion
@@ -176,13 +178,13 @@
 					forEach(callback, function(number) {
 						var oneCallback = callback[number];
 
-						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [nsString, oneCallback, givenObject]));
+						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [nsString, oneCallback, context]));
 					});
 				} else if(typeof nsString === 'object' && nsString instanceof Array) {
 					forEach(nsString, function(number) {
 						var namespace = nsString[number];
 
-						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [namespace, callback, givenObject]));
+						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [namespace, callback, context]));
 					});
 				} else {
 					return subscribe.apply(that, arguments);
@@ -193,17 +195,20 @@
 			 * subscribeOnce event - subscribe once to some event, then unsubscribe immadiately
 			 * @param nsString string namespace string splited by dots
 			 * @param callback function function executed after publishing event
-			 * @param givenObject object/nothing Optional object which will be used as "this" in callback
+			 * @param params given params
+			 *		@param context object/nothing Optional object which will be used as "this" in callback
 			 */
-			subscribeOnce : function(nsString, callback, givenObject) {
-				var that = this;
-				var subscribtion = null;
+			subscribeOnce : function(nsString, callback, params) {
+				var that = this,
+					context = (params && typeof params.context !== 'undefined') ? params.context : null,
+					subscribtion = null;
+
 				var subscribtionCallback = function() {
 						callback.apply(this, arguments);
 						that.unsubscribe(subscribtion);
 					};
 
-				subscribtion = that.subscribe.apply(that, [nsString, subscribtionCallback, givenObject]);
+				subscribtion = that.subscribe.apply(that, [nsString, subscribtionCallback, context]);
 			},
 			/**
 			 * Unsubscribe from given subscribtion

@@ -1,5 +1,5 @@
 test("Presence test", function() {
-	ok(typeof pubsub === 'object' && pubsub != null, "pubsub present");
+	ok(typeof pubsub === 'object' && pubsub !== null, "pubsub present");
 	ok(typeof pubsub.publish === 'function', "pubsub has method publish");
 	ok(typeof pubsub.subscribe === 'function', "pubsub has method subscribe");
 	ok(typeof pubsub.subscribeOnce === 'function', "pubsub has method subscribeOnce");
@@ -210,7 +210,7 @@ test("Pubsub newInstance with own namespaces scope", function() {
 	var number2 = 0;
 
 	var privatePubsub = pubsub.newInstance();
-	
+
 	var subscribtion = pubsub.subscribe('hello/world', function() {
 		number1++;
 	});
@@ -237,7 +237,7 @@ test("Switching config", function() {
 	var privatePubsub = pubsub.newInstance({
 		separator : '.'
 	});
-	
+
 	var subscribtion = pubsub.subscribe('hello/world', function() {
 		number1++;
 	});
@@ -263,10 +263,10 @@ asyncTest("Async pubsub test (differences)", function() {
 	var asyncPubsub = pubsub.newInstance({
 		async : true
 	});
-	
+
 	asyncPubsub.subscribeOnce('hello/world', function() {
 		number1++;
-		
+
 		ok(number1 === 2, "Async pubsub publish worked properly");
 		start();
 	});
@@ -281,10 +281,10 @@ asyncTest("Sync pubsub test (differences)", function() {
 	var number1 = 0;
 
 	var syncPubsub = pubsub.newInstance();
-	
+
 	syncPubsub.subscribeOnce('hello/world', function() {
 		number1++;
-		
+
 		ok(number1 === 1, "Sync pubsub publish worked properly");
 		start();
 	});

@@ -167,7 +167,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	//hello/* executes:
 	//	hello/world, hello/earth, hello/galaxy
 	//	namespace, hello/world/inner is not executed
-	//	
+	//
 	//	"*" goes only one namespace deeper
 	console.log(number); //3
 ```
@@ -242,15 +242,15 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	var number2 = 0;
 
 	var privatePubsub = pubsub.newInstance();
-	
+
 	pubsub.subscribe('hello/world', function() {
 		number1++;
 	});
-	
+
 	privatePubsub.subscribe('hello/world', function() {
 		number2++;
 	});
-	
+
 	pubsub.publish('hello/world');
 	console.log(number1 + ',' + number2); //1,0
 
@@ -265,14 +265,14 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	var asyncPubsub = pubsub.newInstance({
 		async : true
 	});
-	
+
 	asyncPubsub.subscribeOnce('hello/world', function() {
 		number1++;
 		console.log(number1); //2
 	});
 
 	asyncPubsub.publish('hello/world'); // asynchronous call to 'hello/world'
-	
+
 	number1++;
 	console.log(number1); //1
 ```
@@ -289,6 +289,8 @@ Default pubsub.js configuration:
 ```
 
 ## Changelog
+* v1.3.0
+	* Changed the way of using context parameter in subscribe method - API changes to subscribe method!
 * v1.2.0
 	* Changed the way of using event inheritance - API changes to publish method!
 	* Added possibility to use "publish" asynchronously
@@ -310,7 +312,7 @@ Default pubsub.js configuration:
 	* Improved performance - about 350% on chrome, 20% on firefox
 * v1.0.0
 	* Every basic tests passing
-	
+
 ## License
 
 MIT
