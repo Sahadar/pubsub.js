@@ -59,8 +59,8 @@
 			}
 		}
 
-		function subscribe(ns_string, callback, givenObject) {
-			var parts = ns_string.split(options.separator),
+		function subscribe(nsString, callback, givenObject) {
+			var parts = nsString.split(options.separator),
 				nsObject, //Namespace object to which we attach event
 				givenObjectSet = (givenObject) ? true : false,
 				eventObject = null,
@@ -89,9 +89,9 @@
 		}
 
 		function unsubscribe (subscribeObject) {
-			var ns_string = subscribeObject.namespace,
+			var nsString = subscribeObject.namespace,
 				eventObject = subscribeObject.event,
-				parts = ns_string.split(options.separator),
+				parts = nsString.split(options.separator),
 				nsObject,
 				i = 0;
 
@@ -100,7 +100,7 @@
 			for (i = 0; i < parts.length; i += 1) {
 				if (typeof nsObject[parts[i]] === "undefined") {
 					if(options.log) {
-						console.error('There is no ' + ns_string + ' subscription');
+						console.error('There is no ' + nsString + ' subscription');
 					}
 					return null;
 				}
@@ -117,14 +117,14 @@
 		return {
 			/**
 			 * Publish event
-			 * @param ns_string string namespace string splited by dots
+			 * @param nsString string namespace string splited by dots
 			 * @param args array of arguments given to callbacks
 			 * @param recurrent bool should execution be bubbled throught namespace
 			 * @param depth integer how many namespaces separated by dots will be executed
 			 */
-			publish : function(ns_string, args, params) {
+			publish : function(nsString, args, params) {
 				var that = this,
-					parts = ns_string.split(options.separator),
+					parts = nsString.split(options.separator),
 					recurrent = (typeof params === 'object' && params.recurrent) ? params.recurrent : options.recurrent, // bubbles event throught namespace if true
 					depth = (typeof params === 'object' && params.depth) ? params.depth : null,
 					async = (typeof params === 'object' && params.async) ? params.async : options.async,
@@ -143,7 +143,7 @@
 						return null;
 					} else if (typeof nsObject[iPart] === "undefined") {
 						if(options.log) {
-							console.warn('There is no ' + ns_string + ' subscription');
+							console.warn('There is no ' + nsString + ' subscription');
 						}
 						return null;
 					}
@@ -162,11 +162,11 @@
 			},
 			/**
 			 * Subscribe event
-			 * @param ns_string string namespace string splited by dots
+			 * @param nsString string namespace string splited by dots
 			 * @param callback function function executed after publishing event
 			 * @param givenObject object/nothing Optional object which will be used as "this" in callback
 			 */
-			subscribe : function(ns_string, callback, givenObject) {
+			subscribe : function(nsString, callback, givenObject) {
 				var that = this,
 					subscriptions = [];
 
@@ -175,11 +175,11 @@
 					forEach(callback, function(number) {
 						var oneCallback = callback[number];
 
-						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [ns_string, oneCallback, givenObject]));
+						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [nsString, oneCallback, givenObject]));
 					});
-				} else if(typeof ns_string === 'object' && ns_string instanceof Array) {
-					forEach(ns_string, function(number) {
-						var namespace = ns_string[number];
+				} else if(typeof nsString === 'object' && nsString instanceof Array) {
+					forEach(nsString, function(number) {
+						var namespace = nsString[number];
 
 						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [namespace, callback, givenObject]));
 					});
@@ -188,7 +188,7 @@
 				}
 				return subscriptions;
 			},
-			subscribeOnce : function(ns_string, callback, givenObject) {
+			subscribeOnce : function(nsString, callback, givenObject) {
 				var that = this;
 				var subscribtion = null;
 				var subscribtionCallback = function() {
@@ -196,7 +196,7 @@
 						that.unsubscribe(subscribtion);
 					};
 
-				subscribtion = that.subscribe.apply(that, [ns_string, subscribtionCallback, givenObject]);
+				subscribtion = that.subscribe.apply(that, [nsString, subscribtionCallback, givenObject]);
 			},
 			unsubscribe : function(subscribeObject) {
 				var that = this;
