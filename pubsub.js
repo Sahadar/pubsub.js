@@ -89,6 +89,9 @@
 		}
 
 		function unsubscribe (subscribeObject) {
+			if(subscribeObject === null || typeof subscribeObject === 'undefined') {
+				return null;
+			}
 			var nsString = subscribeObject.namespace,
 				eventObject = subscribeObject.event,
 				parts = nsString.split(options.separator),
@@ -209,6 +212,7 @@
 					};
 
 				subscribtion = that.subscribe.apply(that, [nsString, subscribtionCallback, context]);
+				return subscribtion;
 			},
 			/**
 			 * Unsubscribe from given subscribtion
