@@ -257,10 +257,10 @@
 		module.exports = pubsubInstance;
 	}
 
-	if(window) {
-		window.pubsub = pubsubInstance;
-	}
-	if(window && window !== scope) {
-		scope.pubsub = pubsubInstance;
+	if(typeof window === 'object') {
+		window.pubsub = pubsubInstance;	
+		if(window !== scope) {
+			scope.pubsub = pubsubInstance;
+		}
 	}
 })(this);

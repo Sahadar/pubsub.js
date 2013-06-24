@@ -288,7 +288,19 @@ Default pubsub.js configuration:
 	log       : false // set to true will log unsubscribed namespaces to which You publish event
 ```
 
+**Using pubsub inside node.js**
+```javascript
+	var pubsub = require('pubsub.js');
+
+	pubsub.subscribe('hello/world', function(text) {
+		console.log(text);	
+	});
+	pubsub.publish('hello/world', ['my text']);
+```
+
 ## Changelog
+* v1.3.1
+	* Fixed problem with "window reference error" in node.js environment
 * v1.3.0
 	* Changed the way of using context parameter in subscribe method - API changes to subscribe method!
 * v1.2.0
