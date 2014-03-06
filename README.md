@@ -1,7 +1,7 @@
 pubsub.js
 =========
 
-JavaScript pubsub implementation with wildcards, inheritance and multisubscribtions
+JavaScript pubsub implementation with wildcards, inheritance and multisubscriptions
 
 [NPM pubsub.js link](https://npmjs.org/package/pubsub.js)
 
@@ -18,7 +18,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 * Event inheritance
 * Wildcards
 * subscribeOnce method
-* Multiple subscribtions
+* Multiple subscriptions
 * Controll under event bubbling depth
 * Works with require.js library
 * Written with TDD
@@ -57,7 +57,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 
 ```javascript
 	//subscribe to 'hello/world' namespace
-	var subscribtion = pubsub.subscribe('hello/world', function() {
+	var subscription = pubsub.subscribe('hello/world', function() {
 		console.log('hello world!');
 	});
 	//publish event on 'hello/world' namespace
@@ -65,10 +65,10 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	//prints "hello world" inside console
 
 	//unsubscribe
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 	//publish event on 'hello/world' namespace
 	pubsub.publish('hello/world');
-	//nothing happen - we've previously unsubscribed that subscribtion
+	//nothing happen - we've previously unsubscribed that subscription
 ```
 
 ### Changing default configuration
@@ -84,7 +84,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 **After pubsub load - use it with your configuration, pubsub.js will replace that previous "pubsub" global variable with its own instance**
 ```javascript
 	//subscribe to 'hello.world' namespace
-	var subscribtion = pubsub.subscribe('hello.world', function() {
+	var subscription = pubsub.subscribe('hello.world', function() {
 		console.log('hello world!');
 	});
 	//publish event on 'hello.world' namespace
@@ -92,10 +92,10 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	//prints "hello world" inside console
 
 	//unsubscribe
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 	//publish event on 'hello.world' namespace
 	pubsub.publish('hello.world');
-	//nothing happen - we've previously unsubscribed that subscribtion
+	//nothing happen - we've previously unsubscribed that subscription
 ```
 
 ***Node.js***
@@ -113,7 +113,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 
 ```javascript
 	//subscribe to 'hello' namespace
-	var subscribtion = pubsub.subscribe('hello', function() {
+	var subscription = pubsub.subscribe('hello', function() {
 		console.log('hello world!');
 	});
 	//publish event on 'hello/world' namespace
@@ -172,13 +172,13 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	console.log(number); //3
 ```
 
-### Multiple subscribtion
+### Multiple subscription
 
 **many namespaces, one callback**
 ```javascript
 	var number = 0;
 
-	var subscribtion = pubsub.subscribe(['hello/world', 'goodbye/world'], function() {
+	var subscription = pubsub.subscribe(['hello/world', 'goodbye/world'], function() {
 		number++;
 	});
 
@@ -186,7 +186,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	console.log(number); //1
 	pubsub.publish('goodbye/world');
 	console.log(number); //2
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 
 	pubsub.publish('hello/world');
 	console.log(number); //2
@@ -199,7 +199,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	var number1 = 0;
 	var number2 = 0;
 
-	var subscribtion = pubsub.subscribe('hello/world', [function() {
+	var subscription = pubsub.subscribe('hello/world', [function() {
 		number1++;
 	}, function() {
 		number2 += 2;
@@ -207,7 +207,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 
 	pubsub.publish('hello/world');
 	console.log(number1 + ',' + number2); //1,2
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 
 	pubsub.publish('hello/world');
 	console.log(number1 + ',' + number2); //2,4
@@ -218,7 +218,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	var number1 = 0;
 	var number2 = 0;
 
-	var subscribtion = pubsub.subscribe(['hello/world', 'goodbye/world'], [function() {
+	var subscription = pubsub.subscribe(['hello/world', 'goodbye/world'], [function() {
 		number1++;
 	}, function() {
 		number2 += 2;
@@ -228,7 +228,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscribti
 	console.log(number1 + ',' + number2); //1,2
 	pubsub.publish('goodbye/world');
 	console.log(number1 + ',' + number2); //2,4
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 
 	pubsub.publish('hello/world');
 	console.log(number1 + ',' + number2); //2,4
@@ -293,7 +293,7 @@ Default pubsub.js configuration:
 	var pubsub = require('pubsub.js');
 
 	pubsub.subscribe('hello/world', function(text) {
-		console.log(text);	
+		console.log(text);
 	});
 	pubsub.publish('hello/world', ['my text']);
 ```
@@ -311,9 +311,9 @@ Default pubsub.js configuration:
 	* changed the way of setting own config
 	* implemented "newInstance" method
 * v1.0.6
-	* Fixed bug with unsubscribtion - subscribtion during publish of the same namespace (test case 3)
+	* Fixed bug with unsubscription - subscription during publish of the same namespace (test case 3)
 * v1.0.5
-	* Added multisubscribtion possibilities
+	* Added multisubscription possibilities
 * v1.0.4
 	* Added subscribeOnce method
 * v1.0.3
