@@ -34,6 +34,10 @@ test("Unsubscribe test (chained unsubscribe)", function() {
 	var subscription2 = pubsub.subscribe('hello/world1', function() {
 		iterator++;
 	});
+	var subscription3 = pubsub.subscribe('hello/world2', function() {
+		iterator++;
+		pubsub.unsubscribe(subscription3);
+	});
 
 	pubsub.publish('hello/world1');
 	ok(iterator === 2, 'Second subscription executed properly');
@@ -46,6 +50,7 @@ test("Publish test (flat)", function() {
 		iterator += 1;
 	});
 	pubsub.publish('hello');
+	pubsub.publish('world');
 	ok(iterator === 1, 'Done has proper value');
 	pubsub.unsubscribe(subscription);
 	pubsub.publish('hello');
@@ -266,6 +271,26 @@ test("Switching config", function() {
 	pubsub.unsubscribe(subscription);
 	pubsub.publish('hello/world');
 	ok(number1 === 1 && number2 === 1, "Public unsubscribe worked properly");
+});
+
+test("Subscription wildcard test (*)", function() {
+	var number = 0;
+
+	var subscription = pubsub.subscribe('*', function() {
+		number += 1;
+	});
+
+	pubsub.publish('hello');
+	pubsub.publish('world');
+	pubsub.publish('lord');
+	pubsub.publish('globe');
+
+	ok(number === 4, 'Subscription wildcard is working properly');
+	pubsub.unsubscribe(subscription);
+
+	pubsub.publish('hello');
+	pubsub.publish('hello/dupa');
+	ok(number === 4, 'Unsubscribe test');
 });
 
 test("Subscription wildcard test (hello/*)", function() {

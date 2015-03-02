@@ -63,18 +63,27 @@
 			var partsLength = options.partsLength;
 			var recurrent = options.recurrent;
 			var i = (partsLength - parts.length - 1);
-			console.log('iPart: ', iPart);
-			console.log('i: ', i);
 
-			// handle pubsub wildcards
-			if(iPart === '*') {
-				executePublishWildcard(nsObject, args, async);
+			// parts was empty
+			if(!iPart) {
+				executeCallback(nsObject._events, args, async);
 				return;
+			}
+
+			if(options.nsString === 'lord') {
+				console.log('_eventObject: ', _eventObject);
+				// console.log('iPart:', iPart);
+				console.log('parts: ', parts);
 			}
 
 			// handle subscribe wildcard
 			if(typeof nsObject['*'] !== 'undefined') {
 				publish(nsObject['*'], args, parts, options);
+			}
+
+			// handle publish wildcard
+			if(iPart === '*') {
+				executePublishWildcard(nsObject, args, async);
 			}
 
 			// no namespace = leave publish
@@ -85,7 +94,6 @@
 				return;
 			}
 
-			console.log('nsObject[iPart]: ', nsObject[iPart]);
 			nsObject = nsObject[iPart];
 			if(recurrent === true && typeof depth !== 'number') { //depth is not defined
 				executeCallback(nsObject._events, args, async);
@@ -93,11 +101,7 @@
 				executeCallback(nsObject._events, args, async);
 			}
 
-			if(recurrent === false && parts.length === 0) {
-				executeCallback(nsObject._events, args, async);
-			} else {
-				publish(nsObject, args, parts, options);
-			}
+			publish(nsObject, args, parts, options);
 		}
 
 		function executeSubscribeWildcard(nsObject, args, options) {
@@ -199,10 +203,18 @@
 					async = (typeof params === 'object' && params.async) ? params.async : options.async,
 					partsLength = parts.length;
 
+				if(!parts.length) {
+					if(options.log) {
+						console.error('Wrong namespace provided ' + nsString);
+					}
+					return;
+				}
+
 				publish(_eventObject, args, parts, {
 					recurrent : recurrent,
 					depth : depth,
 					parts : parts,
+					nsString : nsString,
 					partsLength : partsLength
 				});
 				
