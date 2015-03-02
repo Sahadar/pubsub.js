@@ -30,6 +30,9 @@
 
 		function executeCallback(subscriptions, args, async) {
 			async = (typeof async === 'boolean') ?  async : options.async;
+			if(!subscriptions.length) {
+				return;
+			}
 
 			//clone array - callbacks can unsubscribe other subscriptions
 			var executedSubscriptions = subscriptions.slice();
