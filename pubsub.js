@@ -57,7 +57,51 @@
 		}
 
 		function publish(nsObject, args, parts, options) {
+			var iPart = parts.shift();
+			var depth = options.depth;
+			var async = options.async;
+			var partsLength = options.partsLength;
+			var recurrent = options.recurrent;
+			var i = (partsLength - parts.length - 1);
+			console.log('iPart: ', iPart);
+			console.log('i: ', i);
 
+			// handle pubsub wildcards
+			if(iPart === '*') {
+				executePublishWildcard(nsObject, args, async);
+				return;
+			}
+
+			// 	// handle subscribe wildcard
+			// 	if(typeof nsObject['*'] !== 'undefined') {
+			// 		executeSubscribeWildcard(nsObject['*'], args, {
+			// 			parts : parts.slice(),
+			// 			async : async,
+			// 			nsString : nsString
+			// 		});
+			// 	}
+
+			// no namespace = leave publish
+			if (typeof nsObject[iPart] === "undefined") {
+				if(options.log) {
+					console.warn('There is no ' + nsString + ' subscription');
+				}
+				return;
+			}
+
+			console.log('nsObject[iPart]: ', nsObject[iPart]);
+			nsObject = nsObject[iPart];
+			if(recurrent === true && typeof depth !== 'number') { //depth is not defined
+				executeCallback(nsObject._events, args, async);
+			} else if(recurrent === true && typeof depth === 'number' && i >= (partsLength - depth)) { //if depth is defined
+				executeCallback(nsObject._events, args, async);
+			}
+
+			if(recurrent === false && parts.length === 0) {
+				executeCallback(nsObject._events, args, async);
+			} else {
+				publish(nsObject, args, parts, options);
+			}
 		}
 
 		function executeSubscribeWildcard(nsObject, args, options) {
@@ -156,13 +200,14 @@
 					parts = nsString.split(options.separator),
 					recurrent = (typeof params === 'object' && params.recurrent) ? params.recurrent : options.recurrent, // bubbles event throught namespace if true
 					depth = (typeof params === 'object' && params.depth) ? params.depth : null,
-					async = (typeof params === 'object' && params.async) ? params.async : options.async;
+					async = (typeof params === 'object' && params.async) ? params.async : options.async,
+					partsLength = parts.length;
 
 				publish(_eventObject, args, parts, {
 					recurrent : recurrent,
-					depth : ,
+					depth : depth,
 					parts : parts,
-					nsLength : nsLength
+					partsLength : partsLength
 				});
 				
 				// for (i = 0; i < partsLength; i++) {
