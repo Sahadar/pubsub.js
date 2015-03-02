@@ -72,14 +72,10 @@
 				return;
 			}
 
-			// 	// handle subscribe wildcard
-			// 	if(typeof nsObject['*'] !== 'undefined') {
-			// 		executeSubscribeWildcard(nsObject['*'], args, {
-			// 			parts : parts.slice(),
-			// 			async : async,
-			// 			nsString : nsString
-			// 		});
-			// 	}
+			// handle subscribe wildcard
+			if(typeof nsObject['*'] !== 'undefined') {
+				publish(nsObject['*'], args, parts, options);
+			}
 
 			// no namespace = leave publish
 			if (typeof nsObject[iPart] === "undefined") {

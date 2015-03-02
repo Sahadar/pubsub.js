@@ -40,6 +40,18 @@ test("Unsubscribe test (chained unsubscribe)", function() {
 	pubsub.unsubscribe(subscription2);
 });
 
+test("Publish test (flat)", function() {
+	var iterator = 0;
+	var subscription = pubsub.subscribe('hello', function() {
+		iterator += 1;
+	});
+	pubsub.publish('hello');
+	ok(iterator === 1, 'Done has proper value');
+	pubsub.unsubscribe(subscription);
+	pubsub.publish('hello');
+	ok(iterator === 1, 'Done has proper value');
+});
+
 test("Publish test (basic)", function() {
 	var done = false;
 	var subscription = pubsub.subscribe('hello/world1', function() {
