@@ -60,6 +60,9 @@
 		}
 
 		function publish(nsObject, args, parts, options) {
+			// work on copy - not on reference
+			parts = parts.slice();
+
 			var iPart = parts.shift();
 			var depth = options.depth;
 			var async = options.async;
@@ -71,12 +74,6 @@
 			if(!iPart) {
 				executeCallback(nsObject._events, args, async);
 				return;
-			}
-
-			if(options.nsString === 'lord') {
-				console.log('_eventObject: ', _eventObject);
-				// console.log('iPart:', iPart);
-				console.log('parts: ', parts);
 			}
 
 			// handle subscribe wildcard
