@@ -28,6 +28,29 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscripti
 * Compiled + gzipped weight only 1kB
 * Works also on IE 6+
 
+## Installation
+* download from Github
+* npm: `npm install pubsub.js`
+* bower: `bower install sahadar.pubsub`
+
+Default pubsub.js configuration:
+```javascript
+	separator : '/' //defined namespace separator
+	recurrent : false // defines inheritance of publish event
+	async 	  : false // if true - publish events will be asynchronous
+	log       : false // set to true will log unsubscribed namespaces to which You publish event
+```
+
+**Using pubsub inside node.js**
+```javascript
+	var pubsub = require('pubsub.js');
+
+	pubsub.subscribe('hello/world', function(text) {
+		console.log(text);
+	});
+	pubsub.publish('hello/world', ['my text']);
+```
+
 ## Examples
 
 ### Basic example
@@ -296,27 +319,6 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscripti
 
 	number1++;
 	console.log(number1); //1
-```
-
-## Installation
-Download from github or type `npm install pubsub.js`
-
-Default pubsub.js configuration:
-```javascript
-	separator : '/' //defined namespace separator
-	recurrent : false // defines inheritance of publish event
-	async 	  : false // if true - publish events will be asynchronous
-	log       : false // set to true will log unsubscribed namespaces to which You publish event
-```
-
-**Using pubsub inside node.js**
-```javascript
-	var pubsub = require('pubsub.js');
-
-	pubsub.subscribe('hello/world', function(text) {
-		console.log(text);
-	});
-	pubsub.publish('hello/world', ['my text']);
 ```
 
 ## Changelog
