@@ -113,10 +113,6 @@
 				executeCallback(nsObject._events, args, async);
 			} else {
 				nextPart = parts.shift();
-				console.log('options.nsString: ', options.nsString);
-				console.log('nsObject: ', nsObject);
-				console.log('nextPart: ', nextPart);
-				console.log('nsObject[nextPart]: ', nsObject[nextPart]);
 
 				if(nsObject[nextPart]) {
 					executeSubscribeWildcard(nsObject[nextPart], args, {
@@ -217,45 +213,6 @@
 					nsString : nsString,
 					partsLength : partsLength
 				});
-				
-				// for (i = 0; i < partsLength; i++) {
-				// 	iPart = parts.shift();
-
-				// 	// handle pubsub wildcards
-				// 	if(iPart === '*') {
-				// 		executePublishWildcard(nsObject, args, async);
-				// 		return;
-				// 	}
-
-				// 	// handle subscribe wildcard
-				// 	if(typeof nsObject['*'] !== 'undefined') {
-				// 		executeSubscribeWildcard(nsObject['*'], args, {
-				// 			parts : parts.slice(),
-				// 			async : async,
-				// 			nsString : nsString
-				// 		});
-				// 	}
-
-				// 	// no namespace = leave publish
-				// 	if (typeof nsObject[iPart] === "undefined") {
-				// 		if(options.log) {
-				// 			console.warn('There is no ' + nsString + ' subscription');
-				// 		}
-				// 		return;
-				// 	}
-
-				// 	nsObject = nsObject[iPart];
-
-				// 	if(recurrent === true && typeof depth !== 'number') { //depth is not defined
-				// 		executeCallback(nsObject._events, args, async);
-				// 	} else if(recurrent === true && typeof depth === 'number' && i >= (partsLength - depth)) { //if depth is defined
-				// 		executeCallback(nsObject._events, args, async);
-				// 	}
-				// }
-
-				// if(recurrent === false) {
-				// 	executeCallback(nsObject._events, args, async);
-				// }
 			},
 			/**
 			 * Subscribe event

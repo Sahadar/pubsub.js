@@ -318,6 +318,8 @@ test("Subscription wildcard test (hello/*/world)", function() {
 		number += 1;
 	});
 
+	pubsub.publish('hello');
+	pubsub.publish('hello/my');
 	pubsub.publish('hello/my/world');
 	pubsub.publish('hello/huge/world');
 	pubsub.publish('hello/great/world');
