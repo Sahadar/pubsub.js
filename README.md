@@ -5,10 +5,11 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscripti
 
 [NPM pubsub.js link](https://npmjs.org/package/pubsub.js)
 
-[pubsub.js performance test](http://jsperf.com/pubsub-js-vs-jquery-events)
+[pubsub.js performance compare test (to jQuery events)](http://jsperf.com/pubsub-js-vs-jquery-events/14)
 
 ## Features
 
+* The most advanced
 * Very fast
 * Easy to understand
 * Configurable
@@ -141,7 +142,7 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscripti
 	console.log(data); //'hello'
 ```
 
-### Wildcard "*" <-- one namespace deeper
+### Publish wildcard "*"
 
 ```javascript
 	var number = 0;
@@ -170,6 +171,26 @@ JavaScript pubsub implementation with wildcards, inheritance and multisubscripti
 	//
 	//	"*" goes only one namespace deeper
 	console.log(number); //3
+```
+
+### Subscribe wildcard "*"
+
+```javascript
+	var number = 0;
+
+	var subscription = pubsub.subscribe('hello/*/world', function() {
+		number += 1;
+	});
+
+	pubsub.publish('hello'); // won't handle
+	pubsub.publish('hello/my'); // won't handle
+	pubsub.publish('hello/great/galaxy'); // won't handle
+
+	pubsub.publish('hello/my/world'); // handles
+	pubsub.publish('hello/huge/world'); // handles
+	pubsub.publish('hello/great/world'); // handles
+
+	console.log(number); // 3
 ```
 
 ### Multiple subscription
@@ -299,6 +320,8 @@ Default pubsub.js configuration:
 ```
 
 ## Changelog
+* v1.4.0
+	* Added subscription wildcard "*"
 * v1.3.1
 	* Fixed problem with "window reference error" in node.js environment
 * v1.3.0
@@ -319,7 +342,7 @@ Default pubsub.js configuration:
 * v1.0.3
 	* Changed scope binding in pubsub
 * v1.0.2
-	* Wildcard "*" added
+	* Publish wildcard "*" added
 * v1.0.1
 	* Improved performance - about 350% on chrome, 20% on firefox
 * v1.0.0

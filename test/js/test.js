@@ -11,7 +11,7 @@ test("Unsubscribe test (basic)", function() {
 	var param1 = "some param1";
 	var param2 = "some param2";
 
-	var subscribtion = pubsub.subscribe('hello/world4', function(param1, param2) {
+	var subscription = pubsub.subscribe('hello/world4', function(param1, param2) {
 		values = {
 			'param1' : param1,
 			'param2' : param2
@@ -19,7 +19,7 @@ test("Unsubscribe test (basic)", function() {
 	});
 	pubsub.publish('hello/world4', [param1, param2]);
 	ok(values.param1 === param1 && values.param2 === param2, 'Values has proper value');
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 	pubsub.publish('hello/world4', [null, null]);
 	ok(values.param1 === param1 && values.param2 === param2, 'Values has proper value');
 });
@@ -27,38 +27,55 @@ test("Unsubscribe test (basic)", function() {
 test("Unsubscribe test (chained unsubscribe)", function() {
 	var iterator = 0;
 
-	var subscribtion1 = pubsub.subscribe('hello/world1', function() {
+	var subscription1 = pubsub.subscribe('hello/world1', function() {
 		iterator++;
-		pubsub.unsubscribe(subscribtion1);
+		pubsub.unsubscribe(subscription1);
 	});
-	var subscribtion2 = pubsub.subscribe('hello/world1', function() {
+	var subscription2 = pubsub.subscribe('hello/world1', function() {
 		iterator++;
+	});
+	var subscription3 = pubsub.subscribe('hello/world2', function() {
+		iterator++;
+		pubsub.unsubscribe(subscription3);
 	});
 
 	pubsub.publish('hello/world1');
-	ok(iterator === 2, 'Second subscribtion executed properly');
-	pubsub.unsubscribe(subscribtion2);
+	ok(iterator === 2, 'Second subscription executed properly');
+	pubsub.unsubscribe(subscription2);
+});
+
+test("Publish test (flat)", function() {
+	var iterator = 0;
+	var subscription = pubsub.subscribe('hello', function() {
+		iterator += 1;
+	});
+	pubsub.publish('hello');
+	pubsub.publish('world');
+	ok(iterator === 1, 'Done has proper value');
+	pubsub.unsubscribe(subscription);
+	pubsub.publish('hello');
+	ok(iterator === 1, 'Done has proper value');
 });
 
 test("Publish test (basic)", function() {
 	var done = false;
-	var subscribtion = pubsub.subscribe('hello/world1', function() {
+	var subscription = pubsub.subscribe('hello/world1', function() {
 		done = true;
 	});
 	pubsub.publish('hello/world1');
 	ok(done === true, 'Done has proper value');
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 });
 
 test("Publish test (param)", function() {
 	var done = false;
 	var param = "some param";
-	var subscribtion = pubsub.subscribe('hello/world2', function(param) {
+	var subscription = pubsub.subscribe('hello/world2', function(param) {
 		done = param;
 	});
 	pubsub.publish('hello/world2', [param]);
 	ok(done === param, 'Done has proper value');
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 });
 
 test("Method: subscribeOnce test (with param)", function() {
@@ -81,7 +98,7 @@ test("Publish test (many params)", function() {
 	var param1 = "some param1";
 	var param2 = "some param2";
 
-	var subscribtion = pubsub.subscribe('hello/world3', function(param1, param2) {
+	var subscription = pubsub.subscribe('hello/world3', function(param1, param2) {
 		values = {
 			'param1' : param1,
 			'param2' : param2
@@ -89,7 +106,7 @@ test("Publish test (many params)", function() {
 	});
 	pubsub.publish('hello/world3', [param1, param2]);
 	ok(values.param1 === param1 && values.param2 === param2, 'Values has proper values');
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 });
 
 test("Inheritance test (basic)", function() {
@@ -97,7 +114,7 @@ test("Inheritance test (basic)", function() {
 	var param1 = "some param1";
 	var param2 = "some param2";
 
-	var subscribtion = pubsub.subscribe('hello', function(param1, param2) {
+	var subscription = pubsub.subscribe('hello', function(param1, param2) {
 		values = {
 			'param1' : param1,
 			'param2' : param2
@@ -107,38 +124,63 @@ test("Inheritance test (basic)", function() {
 		recurrent : true
 	});
 	ok(values.param1 === param1 && values.param2 === param2, 'Values has proper value');
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 });
 
-test("Wildcards test (more advanced)", function() {
+test("Publish wildcard test (*)", function() {
 	var number = 0;
 
-	var subscribtion1 = pubsub.subscribe('hello/world', function() {
+	var subscription1 = pubsub.subscribe('hello', function() {
 		number++;
 	});
-	var subscribtion2 = pubsub.subscribe('hello/earth', function() {
+	var subscription2 = pubsub.subscribe('earth', function() {
 		number++;
 	});
-	var subscribtion3 = pubsub.subscribe('hello/galaxy', function() {
+	var subscription3 = pubsub.subscribe('galaxy', function() {
 		number++;
 	});
-	var subscribtion4 = pubsub.subscribe('hello/world/inner', function() {
+	var subscription4 = pubsub.subscribe('hello/world', function() {
+		number++;
+	});
+
+	pubsub.publish('*');
+
+	ok(number === 3, 'Wildcard (*) is working properly');
+	pubsub.unsubscribe(subscription1);
+	pubsub.unsubscribe(subscription2);
+	pubsub.unsubscribe(subscription3);
+	pubsub.unsubscribe(subscription4);
+});
+
+test("Publish wildcard test (hello/*)", function() {
+	var number = 0;
+
+	var subscription1 = pubsub.subscribe('hello/world', function() {
+		number++;
+	});
+	var subscription2 = pubsub.subscribe('hello/earth', function() {
+		number++;
+	});
+	var subscription3 = pubsub.subscribe('hello/galaxy', function() {
+		number++;
+	});
+	var subscription4 = pubsub.subscribe('hello/world/inner', function() {
 		number++;
 	});
 
 	pubsub.publish('hello/*');
 
 	ok(number === 3, 'Wildcard (*) is working properly');
-	pubsub.unsubscribe(subscribtion1);
-	pubsub.unsubscribe(subscribtion2);
-	pubsub.unsubscribe(subscribtion3);
-	pubsub.unsubscribe(subscribtion4);
+	pubsub.unsubscribe(subscription1);
+	pubsub.unsubscribe(subscription2);
+	pubsub.unsubscribe(subscription3);
+	pubsub.unsubscribe(subscription4);
 });
 
-test("Multiple subscribtion1 (one namespace, many callbacks)", function() {
+test("Multiple subscription1 (one namespace, many callbacks)", function() {
 	var number = 0;
 
-	var subscribtion = pubsub.subscribe('hello/world', [
+	var subscription = pubsub.subscribe('hello/world', [
 		function() {
 			number++;
 		},
@@ -151,18 +193,18 @@ test("Multiple subscribtion1 (one namespace, many callbacks)", function() {
 	]);
 
 	pubsub.publish('hello/world');
-	ok(number === 3, 'Multiple subscribtion before unsubscribe is working properly');
-	pubsub.unsubscribe(subscribtion);
+	ok(number === 3, 'Multiple subscription before unsubscribe is working properly');
+	pubsub.unsubscribe(subscription);
 
 	pubsub.publish('hello/world');
-	ok(number === 3, 'Multiple subscribtion after unsubscribe is working properly');
+	ok(number === 3, 'Multiple subscription after unsubscribe is working properly');
 });
 
 
-test("Multiple subscribtion2 (many namespaces, one callback)", function() {
+test("Multiple subscription2 (many namespaces, one callback)", function() {
 	var number = 0;
 
-	var subscribtion = pubsub.subscribe(['hello/world', 'goodbye/world'], function() {
+	var subscription = pubsub.subscribe(['hello/world', 'goodbye/world'], function() {
 		number++;
 	});
 
@@ -170,7 +212,7 @@ test("Multiple subscribtion2 (many namespaces, one callback)", function() {
 	ok(number === 1, 'Subscribtion to hello/world before unsubscribe is working properly');
 	pubsub.publish('goodbye/world');
 	ok(number === 2, 'Subscribtion to goodbye/world before unsubscribe is working properly');
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 
 	pubsub.publish('hello/world');
 	ok(number === 2, 'Subscribtion to hello/world after unsubscribe is working properly');
@@ -178,11 +220,11 @@ test("Multiple subscribtion2 (many namespaces, one callback)", function() {
 	ok(number === 2, 'Subscribtion to goodbye/world after unsubscribe is working properly');
 });
 
-test("Multiple subscribtion3 (many namespaces, many callbacks)", function() {
+test("Multiple subscription3 (many namespaces, many callbacks)", function() {
 	var number1 = 0;
 	var number2 = 0;
 
-	var subscribtion = pubsub.subscribe(['hello/world', 'goodbye/world'], [function() {
+	var subscription = pubsub.subscribe(['hello/world', 'goodbye/world'], [function() {
 		number1++;
 	}, function() {
 		number2+=2;
@@ -194,7 +236,7 @@ test("Multiple subscribtion3 (many namespaces, many callbacks)", function() {
 	pubsub.publish('goodbye/world');
 	ok(number1 === 2, 'Subscribtion to goodbye/world before unsubscribe is working properly (number1)');
 	ok(number2 === 4, 'Subscribtion to goodbye/world before unsubscribe is working properly (number2)');
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 
 	pubsub.publish('hello/world');
 	ok(number1 === 2, 'Subscribtion to hello/world after unsubscribe is working properly (number1)');
@@ -211,7 +253,7 @@ test("Pubsub newInstance with own namespaces scope", function() {
 
 	var privatePubsub = pubsub.newInstance();
 
-	var subscribtion = pubsub.subscribe('hello/world', function() {
+	var subscription = pubsub.subscribe('hello/world', function() {
 		number1++;
 	});
 	var privateSubscribtion = privatePubsub.subscribe('hello/world', function() {
@@ -224,7 +266,7 @@ test("Pubsub newInstance with own namespaces scope", function() {
 	privatePubsub.unsubscribe(privateSubscribtion);
 	privatePubsub.publish('hello/world');
 	ok(number1 === 1 && number2 === 1, "Private unsubscribe worked properly");
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 	pubsub.publish('hello/world');
 	ok(number1 === 1 && number2 === 1, "Public unsubscribe worked properly");
 });
@@ -238,7 +280,7 @@ test("Switching config", function() {
 		separator : '.'
 	});
 
-	var subscribtion = pubsub.subscribe('hello/world', function() {
+	var subscription = pubsub.subscribe('hello/world', function() {
 		number1++;
 	});
 	var privateSubscribtion = privatePubsub.subscribe('hello.world', function() {
@@ -251,9 +293,91 @@ test("Switching config", function() {
 	privatePubsub.unsubscribe(privateSubscribtion);
 	privatePubsub.publish('hello.world');
 	ok(number1 === 1 && number2 === 1, "Private unsubscribe worked properly");
-	pubsub.unsubscribe(subscribtion);
+	pubsub.unsubscribe(subscription);
 	pubsub.publish('hello/world');
 	ok(number1 === 1 && number2 === 1, "Public unsubscribe worked properly");
+});
+
+test("Subscription wildcard test (*)", function() {
+	var number = 0;
+
+	var subscription = pubsub.subscribe('*', function() {
+		number += 1;
+	});
+
+	pubsub.publish('hello');
+	pubsub.publish('world');
+	pubsub.publish('lord');
+	pubsub.publish('globe');
+
+	ok(number === 4, 'Subscription wildcard is working properly');
+	pubsub.unsubscribe(subscription);
+
+	pubsub.publish('hello');
+	pubsub.publish('hello/world');
+	ok(number === 4, 'Unsubscribe test');
+});
+
+test("Subscription wildcard test (hello/*)", function() {
+	var number = 0;
+
+	var subscription = pubsub.subscribe('hello/*', function() {
+		number += 1;
+	});
+
+	pubsub.publish('hello/world');
+	pubsub.publish('hello/globe');
+	pubsub.publish('hello/galaxy');
+
+	ok(number === 3, 'Subscription wildcard is working properly');
+	pubsub.unsubscribe(subscription);
+
+	pubsub.publish('hello/world');
+	ok(number === 3, 'Subscription wildcard is working properly');
+});
+
+test("Subscription wildcard test (hello/*/world)", function() {
+	var number = 0;
+
+	var subscription = pubsub.subscribe('hello/*/world', function() {
+		number += 1;
+	});
+
+	pubsub.publish('hello');
+	pubsub.publish('hello/my');
+	pubsub.publish('hello/my/world');
+	pubsub.publish('hello/huge/world');
+	pubsub.publish('hello/great/world');
+
+	ok(number === 3, 'Subscription wildcard is working properly');
+
+	pubsub.publish('hello/great/galaxy');
+	ok(number === 3, 'Subscription wildcard is working properly');
+	pubsub.unsubscribe(subscription);
+
+	pubsub.publish('hello/great/world');
+	ok(number === 3, 'Subscription wildcard is working properly');
+});
+
+test("Subscription wildcard test (hello/*/*/world)", function() {
+	var number = 0;
+
+	var subscription = pubsub.subscribe('hello/*/*/world', function() {
+		number += 1;
+	});
+
+	pubsub.publish('hello/my/green/world');
+	pubsub.publish('hello/huge/yellow/world');
+	pubsub.publish('hello/great/blue/world');
+
+	ok(number === 3, 'Subscription wildcard is working properly');
+
+	pubsub.publish('hello/great/black/galaxy');
+	ok(number === 3, 'Subscription wildcard is working properly');
+	pubsub.unsubscribe(subscription);
+
+	pubsub.publish('hello/great/green/world');
+	ok(number === 3, 'Subscription wildcard is working properly');
 });
 
 asyncTest("Async pubsub test (differences)", function() {
