@@ -1,0 +1,30 @@
+{
+  "name": "pubsub.js",
+  "main": "pubsub.js",
+  "version": "1.4.0",
+  "homepage": "https://github.com/Sahadar/pubsub.js",
+  "authors": [
+    "Wojciech Dłubacz <wdsahadar@gmail.com>"
+  ],
+  "description": "JavaScript pubsub implementation with wildcards, inheritance and multisubscriptions",
+  "keywords": [
+    "pubsub",
+    "listener",
+    "vanilla",
+    "pub/sub",
+    "publish/subscribe",
+    "publish",
+    "event",
+    "emitter",
+    "eventemitter",
+    "subscribe"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
