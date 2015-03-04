@@ -127,7 +127,32 @@ test("Inheritance test (basic)", function() {
 	pubsub.unsubscribe(subscription);
 });
 
-test("Wildcards test (more advanced)", function() {
+test("Publish wildcard test (*)", function() {
+	var number = 0;
+
+	var subscription1 = pubsub.subscribe('hello', function() {
+		number++;
+	});
+	var subscription2 = pubsub.subscribe('earth', function() {
+		number++;
+	});
+	var subscription3 = pubsub.subscribe('galaxy', function() {
+		number++;
+	});
+	var subscription4 = pubsub.subscribe('hello/world', function() {
+		number++;
+	});
+
+	pubsub.publish('*');
+
+	ok(number === 3, 'Wildcard (*) is working properly');
+	pubsub.unsubscribe(subscription1);
+	pubsub.unsubscribe(subscription2);
+	pubsub.unsubscribe(subscription3);
+	pubsub.unsubscribe(subscription4);
+});
+
+test("Publish wildcard test (hello/*)", function() {
 	var number = 0;
 
 	var subscription1 = pubsub.subscribe('hello/world', function() {
