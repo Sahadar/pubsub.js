@@ -314,7 +314,7 @@ test("Subscription wildcard test (*)", function() {
 	pubsub.unsubscribe(subscription);
 
 	pubsub.publish('hello');
-	pubsub.publish('hello/dupa');
+	pubsub.publish('hello/world');
 	ok(number === 4, 'Unsubscribe test');
 });
 
