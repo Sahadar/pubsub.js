@@ -209,6 +209,7 @@
 				publish(_eventObject, args, parts, {
 					recurrent : recurrent,
 					depth : depth,
+					async : async,
 					parts : parts,
 					nsString : nsString,
 					partsLength : partsLength
