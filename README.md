@@ -3,6 +3,8 @@ pubsub.js
 
 JavaScript pubsub implementation with wildcards, inheritance and multisubscriptions
 
+[Web page](https://sahadar.github.io/pubsub/)
+
 [NPM pubsub.js link](https://npmjs.org/package/pubsub.js)
 
 [pubsub.js performance compare test (to jQuery events)](http://jsperf.com/pubsub-js-vs-jquery-events/14)
