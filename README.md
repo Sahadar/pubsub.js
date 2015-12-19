@@ -3,6 +3,8 @@ pubsub.js
 
 JavaScript pubsub implementation with wildcards, inheritance and multisubscriptions
 
+[![Build Status](https://travis-ci.org/Sahadar/pubsub.js.svg?branch=master)](https://travis-ci.org/Sahadar/pubsub.js)
+
 [Web page](https://sahadar.github.io/pubsub/)
 
 [NPM pubsub.js link](https://npmjs.org/package/pubsub.js)
