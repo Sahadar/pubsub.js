@@ -324,6 +324,8 @@ Default pubsub.js configuration:
 ```
 
 ## Changelog
+* v1.4.1
+	* Travis integration
 * v1.4.0
 	* Added subscription wildcard "*"
 * v1.3.1

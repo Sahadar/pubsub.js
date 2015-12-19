@@ -1,7 +1,7 @@
 {
 	"name": "pubsub.js",
 	"description": "Vanilla JS Pubsub implementation with wildcards and inheritance",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"author": "Wojciech Dłubacz <wdsahadar@gmail.com>",
 	"directories" : {
 		"lib" : ".",
@@ -10,8 +10,8 @@
 	"contributors": [
 	],
 	"repository": {
-			"type": "git",
-			"url": "git@github.com:Sahadar/pubsub.js.git"
+		"type": "git",
+		"url": "git@github.com:Sahadar/pubsub.js.git"
 	},
 	"keywords": [
 		"pubsub",
@@ -25,12 +25,14 @@
 		"eventemitter",
 		"subscribe"
 	],
+	"devDependencies": {
+		"qunit": "~0.7.7",
+		"qunit-phantomjs-runner": "~2.1.0"
+	},
 	"engines": {"node": ">= 0.6.x"},
 	"main": "pubsub.js",
-	"licenses": [
-		{
-			 "type": "MIT",
-			 "url": "http: //www.opensource.org/licenses/mit-license.php"
-		}
-	]
+	"scripts": {
+		"test": "phantomjs node_modules/qunit-phantomjs-runner/runner.js test/pubsub.html"
+	},
+	"license": "MIT"
 }
