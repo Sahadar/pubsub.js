@@ -329,6 +329,8 @@ Default pubsub.js configuration:
 ```
 
 ## Changelog
+* v1.4.2
+	* Documentation changes
 * v1.4.1
 	* Travis integration
 * v1.4.0
