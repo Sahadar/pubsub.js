@@ -1,9 +1,11 @@
 pubsub.js
 =========
 
-JavaScript pubsub implementation with wildcards, inheritance and multisubscriptions
+Dependency free JavaScript pubsub implementation with wildcards, inheritance and multisubscriptions
 
 [![Build Status](https://travis-ci.org/Sahadar/pubsub.js.svg?branch=master)](https://travis-ci.org/Sahadar/pubsub.js)
+[![Dependency Status](https://david-dm.org/Sahadar/pubsub.js.svg)](https://david-dm.org/Sahadar/pubsub.js)
+[![devDependency Status](https://david-dm.org/Sahadar/pubsub.js/dev-status.svg)](https://david-dm.org/Sahadar/pubsub.js#info=devDependencies)
 
 [Web page](https://sahadar.github.io/pubsub/)
 
