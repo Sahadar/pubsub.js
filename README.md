@@ -32,7 +32,7 @@ Dependency free JavaScript pubsub implementation with wildcards, inheritance and
 * Written with TDD
 * Possibility to make new instances of pubsub with private namespaces scope
 * Possibility to publish async events
-* Compiled + gzipped weight only 1kB
+* Compiled + gzipped weighs only 1kB
 * Works also on IE 6+
 
 ## Installation
