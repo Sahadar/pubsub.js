@@ -329,6 +329,8 @@ Default pubsub.js configuration:
 ```
 
 ## Changelog
+* v1.4.3
+	* Fix issue #7 - "recurrent" option, new test cases
 * v1.4.2
 	* Documentation changes
 * v1.4.1

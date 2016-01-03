@@ -15,6 +15,7 @@
 		var options = {
 			separator : (config && config.separator) ?  config.separator : '/',
 			recurrent : (config && typeof config.recurrent === 'boolean') ?  config.recurrent :  (false),
+			depth     : (config && typeof config.depth === 'number') ?  config.depth :  null,
 			async     : (config && typeof config.async === 'boolean') ?  config.async :  (false),
 			log       : (config && config.log) ?  config.log :  (false)
 		};
@@ -68,14 +69,13 @@
 			var async = options.async;
 			var partsLength = options.partsLength;
 			var recurrent = options.recurrent;
-			var i = (partsLength - parts.length - 1);
+			var partNumber = (partsLength - parts.length);
 
-			// parts was empty
+			// parts is empty
 			if(!iPart) {
 				executeCallback(nsObject._events, args, async);
 				return;
 			}
-
 			// handle subscribe wildcard
 			if(typeof nsObject['*'] !== 'undefined') {
 				publish(nsObject['*'], args, parts, options);
@@ -95,9 +95,13 @@
 			}
 
 			nsObject = nsObject[iPart];
+
 			if(recurrent === true && typeof depth !== 'number') { //depth is not defined
 				executeCallback(nsObject._events, args, async);
-			} else if(recurrent === true && typeof depth === 'number' && i >= (partsLength - depth)) { //if depth is defined
+				if(parts.length === 0) {
+					return;
+				}
+			} else if(recurrent === true && typeof depth === 'number' && partNumber >= (partsLength - depth)) { //if depth is defined
 				executeCallback(nsObject._events, args, async);
 			}
 
@@ -195,7 +199,7 @@
 				var that = this,
 					parts = nsString.split(options.separator),
 					recurrent = (typeof params === 'object' && params.recurrent) ? params.recurrent : options.recurrent, // bubbles event throught namespace if true
-					depth = (typeof params === 'object' && params.depth) ? params.depth : null,
+					depth = (typeof params === 'object' && params.depth) ? params.depth : options.depth,
 					async = (typeof params === 'object' && params.async) ? params.async : options.async,
 					partsLength = parts.length;
 
@@ -310,7 +314,7 @@
 	}
 
 	if(typeof window === 'object') {
-		window.pubsub = pubsubInstance;	
+		window.pubsub = pubsubInstance;
 		if(window !== scope) {
 			scope.pubsub = pubsubInstance;
 		}
