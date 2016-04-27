@@ -5,7 +5,6 @@ Dependency free JavaScript pubsub implementation with wildcards, inheritance and
 
 [![Build Status](https://travis-ci.org/Sahadar/pubsub.js.svg?branch=master)](https://travis-ci.org/Sahadar/pubsub.js)
 [![Dependency Status](https://david-dm.org/Sahadar/pubsub.js.svg)](https://david-dm.org/Sahadar/pubsub.js)
-[![devDependency Status](https://david-dm.org/Sahadar/pubsub.js/dev-status.svg)](https://david-dm.org/Sahadar/pubsub.js#info=devDependencies)
 [![License](https://img.shields.io/npm/l/pubsub.js.svg)](http://opensource.org/licenses/MIT)
 
 [Web page](https://sahadar.github.io/pubsub/)
