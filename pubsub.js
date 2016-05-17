@@ -42,10 +42,10 @@
 				if(typeof subscription === 'object' && executedSubscriptions.hasOwnProperty(subscriptionId)) {
 					if(async) {
 						setTimeout(function() {
-							subscription.callback.apply(subscription.object, args);
+							subscription.callback.apply(subscription.context, args);
 						}, 4);
 					} else {
-						subscription.callback.apply(subscription.object, args);
+						subscription.callback.apply(subscription.context, args);
 					}
 				}
 			});
@@ -149,7 +149,7 @@
 
 			eventObject = {
 				callback	: callback,
-				object  	: contextObject // "this" parameter in executed function
+				context  	: contextObject.context // "this" parameter in executed function
 			};
 
 			nsObject._events.push(eventObject);
