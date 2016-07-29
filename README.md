@@ -20,20 +20,20 @@ Read documentation, check tests file, be inspired and feel free to use it and/or
 * Currently it is the most advanced dependency-free pub/sub library on npm
 * Very fast
 * Easy to understand
-* Configurable [params](#change_config)
 * Dependency free = using native JavaScript code
+* Configurable [link](#change_config)
 * Works on server and browser side smoothly
 * Event inheritance [link](#event_inheritance)
 * Wildcards [publish wildcard](#publish_wildcard) [subscribe wildcard](#subscribe_wildcard)
 * subscribeOnce method [link](#subscribeOnce)
 * Multiple subscriptions [link](#multiple_subscriptions)
-* Controll under event bubbling depth
-* Works with *require.js* library
-* Written with TDD
 * Possibility to make new instances of pubsub with private namespaces scope [link](#new_instance)
 * Possibility to publish async events [link](#async_events)
 * Possibility to define context for all callbacks by providing pubsub|newInstance "context" param [link](#new_instance_context)
 * Possibility to define context for each callback [link](#subscribe_context)
+* Controll under event bubbling depth
+* Works with *require.js* library
+* Written with TDD
 * Compiled + gzipped weighs only 1kB, less than 320 lines of code
 * Works also on IE 6+
 
