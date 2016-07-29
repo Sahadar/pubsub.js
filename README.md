@@ -40,7 +40,7 @@ Read documentation, check tests file, be inspired and feel free to use it and/or
 ## Installation
 * download from Github
 * npm: `npm install pubsub.js`
-* bower: `bower install sahadar.pubsub`
+* bower: `bower install pubsub-advanced`
 
 Default pubsub.js configuration:
 ```javascript
