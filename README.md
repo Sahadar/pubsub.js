@@ -20,20 +20,21 @@ Read documentation, check tests file, be inspired and feel free to use it and/or
 * Currently it is the most advanced dependency-free pub/sub library on npm
 * Very fast
 * Easy to understand
-* Configurable
+* Configurable [params](#change_config)
 * Dependency free = using native JavaScript code
 * Works on server and browser side smoothly
-* Event inheritance
-* Wildcards
-* subscribeOnce method
-* Multiple subscriptions
+* Event inheritance [link](#event_inheritance)
+* Wildcards [publish wildcard](#publish_wildcard) [subscribe wildcard](#subscribe_wildcard)
+* subscribeOnce method [link](#subscribeOnce)
+* Multiple subscriptions [link](#multiple_subscriptions)
 * Controll under event bubbling depth
 * Works with *require.js* library
 * Written with TDD
-* Possibility to make new instances of pubsub with private namespaces scope
-* Possibility to publish async events
-* Possibility to define context of every callback / or for all by providing pubsub|newInstance "context" param [link](#change_config)
-* Compiled + gzipped weighs only 1kB
+* Possibility to make new instances of pubsub with private namespaces scope [link](#new_instance)
+* Possibility to publish async events [link](#async_events)
+* Possibility to define context for all callbacks by providing pubsub|newInstance "context" param [link](#new_instance_context)
+* Possibility to define context for each callback [link](#subscribe_context)
+* Compiled + gzipped weighs only 1kB, less than 320 lines of code
 * Works also on IE 6+
 
 ## Installation
@@ -74,7 +75,7 @@ Default pubsub.js configuration:
 	//prints "hello world" inside console
 ```
 
-### Publish with parameter
+### Publish with param
 
 ```javascript
 	//subscribe to 'hello/world' namespace
@@ -143,7 +144,7 @@ Default pubsub.js configuration:
 **After pubsub load, it'll have your configuration as in browser example**
 
 
-### Event inheritance
+### Event inheritance <a name="event_inheritance"></a>
 
 ```javascript
 	//subscribe to 'hello' namespace
@@ -159,7 +160,7 @@ Default pubsub.js configuration:
 	//then it tries to execute on "hello/world" but nothing is listening on it
 ```
 
-### Method: subscribeOnce
+### Method: subscribeOnce <a name="subscribeOnce"></a>
 
 ```javascript
 	var iterator = 0;
@@ -175,7 +176,7 @@ Default pubsub.js configuration:
 	console.log(data); //'hello'
 ```
 
-### Publish wildcard "*"
+### Publish wildcard "*" <a name="publish_wildcard"></a>
 
 ```javascript
 	var number = 0;
@@ -206,7 +207,7 @@ Default pubsub.js configuration:
 	console.log(number); //3
 ```
 
-### Subscribe wildcard "*"
+### Subscribe wildcard "*" <a name="subscribe_wildcard"></a>
 
 ```javascript
 	var number = 0;
@@ -226,7 +227,7 @@ Default pubsub.js configuration:
 	console.log(number); // 3
 ```
 
-### Multiple subscription
+### Multiple subscriptions <a name="multiple_subscriptions"></a>
 
 **many namespaces, one callback**
 ```javascript
@@ -290,7 +291,7 @@ Default pubsub.js configuration:
 	console.log(number1 + ',' + number2); //2,4
 ```
 
-###making new instances with own namespaces scope
+###making new instances with own namespaces scope <a name="new_instance"></a>
 ```javascript
 	var number1 = 0;
 	var number2 = 0;
@@ -312,7 +313,22 @@ Default pubsub.js configuration:
 	console.log(number1 + ',' + number2); //1,1
 ```
 
-**Using pubsub asynchronously**
+**making new instances with own context <a name="new_instance_context"></a>**
+```javascript
+	var contextArgument = ["object"];
+	var privatePubsub = pubsub.newInstance({
+		context : contextArgument
+	});
+
+	privatePubsub.subscribe('hello/context', function() {
+		var that = this;
+
+		console.log(that === contextArgument); //true
+	});
+	privatePubsub.publish('hello/context');
+```
+
+###Using pubsub asynchronously <a name="async_events"></a>
 ```javascript
 	var number1 = 0;
 
@@ -329,6 +345,28 @@ Default pubsub.js configuration:
 
 	number1++;
 	console.log(number1); //1
+```
+
+###Using context param in subscribe method <a name="subscribe_context"></a>
+```javascript
+	var contextArgument = ["object"];
+	var privatePubsub = pubsub.newInstance();
+
+	function callbackFirst() {
+		var that = this;
+
+		console.log(that === callbackFirst); // true
+	}
+	function callbackSecond() {
+		var that = this;
+
+		console.log(that === contextArgument); // true
+	}
+
+	var privateSubscribtion1 = privatePubsub.subscribe('hello/context', callbackFirst);
+	var privateSubscribtion2 = privatePubsub.subscribe('hello/that', callbackSecond, {
+		context : contextArgument
+	});
 ```
 
 ## Changelog
