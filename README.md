@@ -404,7 +404,7 @@ Default pubsub.js configuration:
 * v1.0.1
 	* Improved performance - about 350% on chrome, 20% on firefox
 * v1.0.0
-	* Every basic tests passing
+	* Every basic test passing
 
 ## License
 
