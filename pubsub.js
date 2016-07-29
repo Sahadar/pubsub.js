@@ -14,10 +14,11 @@
 		var _eventObject = {};
 		var options = {
 			separator : (config && config.separator) ?  config.separator : '/',
-			recurrent : (config && typeof config.recurrent === 'boolean') ?  config.recurrent :  (false),
+			recurrent : (config && typeof config.recurrent === 'boolean') ?  config.recurrent : (false),
 			depth     : (config && typeof config.depth === 'number') ?  config.depth :  null,
-			async     : (config && typeof config.async === 'boolean') ?  config.async :  (false),
-			log       : (config && config.log) ?  config.log :  (false)
+			async     : (config && typeof config.async === 'boolean') ?  config.async : (false),
+			context   : (config && config.context) ?  config.context : null,
+			log       : (config && config.log) ? config.log : (false)
 		};
 
 		function forEach(dataArray, callback) {
@@ -35,17 +36,18 @@
 				return;
 			}
 
-			//clone array - callbacks can unsubscribe other subscriptions
+			// clone array - callbacks can unsubscribe other subscriptions
+			// reduces a lot performance but is safe
 			var executedSubscriptions = subscriptions.slice();
 
 			forEach(executedSubscriptions, function(subscriptionId, subscription) {
 				if(typeof subscription === 'object' && executedSubscriptions.hasOwnProperty(subscriptionId)) {
 					if(async) {
 						setTimeout(function() {
-							subscription.callback.apply(subscription.object, args);
+							subscription.callback.apply(subscription.context, args);
 						}, 4);
 					} else {
-						subscription.callback.apply(subscription.object, args);
+						subscription.callback.apply(subscription.context, args);
 					}
 				}
 			});
@@ -128,14 +130,16 @@
 			}
 		}
 
-		function subscribe(nsString, callback, contextObject) {
+		function subscribe(nsString, callback, params) {
 			var parts = nsString.split(options.separator),
 				nsObject, //Namespace object to which we attach event
-				givenObjectSet = (contextObject) ? true : false,
+				context = (params && typeof params.context !== 'undefined') ? params.context : options.context,
 				eventObject = null,
 				i = 0;
 
-			contextObject = (givenObjectSet) ? contextObject : callback;
+			if(!context) {
+				context = callback;
+			}
 
 			//Iterating through _eventObject to find proper nsObject
 			nsObject = _eventObject;
@@ -149,7 +153,7 @@
 
 			eventObject = {
 				callback	: callback,
-				object  	: contextObject // "this" parameter in executed function
+				context		: context // "this" parameter in executed function
 			};
 
 			nsObject._events.push(eventObject);
@@ -228,7 +232,6 @@
 			 */
 			subscribe : function(nsString, callback, params) {
 				var that = this,
-					context = (params && typeof params.context !== 'undefined') ? params.context : null,
 					subscriptions = [];
 
 				// array of callbacks - multiple subscription
@@ -236,14 +239,14 @@
 					forEach(callback, function(number) {
 						var oneCallback = callback[number];
 
-						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [nsString, oneCallback, context]));
+						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [nsString, oneCallback, params]));
 					});
 				// array of namespaces - multiple subscription
 				} else if(typeof nsString === 'object' && nsString instanceof Array) {
 					forEach(nsString, function(number) {
 						var namespace = nsString[number];
 
-						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [namespace, callback, context]));
+						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [namespace, callback, params]));
 					});
 				} else {
 					return subscribe.apply(that, arguments);
@@ -263,9 +266,9 @@
 					subscription = null;
 
 				var subscriptionCallback = function() {
-						callback.apply(this, arguments);
-						that.unsubscribe(subscription);
-					};
+					callback.apply(this, arguments);
+					that.unsubscribe(subscription);
+				};
 
 				subscription = that.subscribe.apply(that, [nsString, subscriptionCallback, context]);
 				return subscription;

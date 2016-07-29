@@ -1,7 +1,8 @@
 pubsub.js
 =========
 
-Dependency free JavaScript pubsub implementation with wildcards, inheritance and multisubscriptions
+Dependency free JavaScript pubsub implementation with wildcards, inheritance and multisubscriptions.
+Working smoothly both on frontend and backend side.
 
 [![Build Status](https://travis-ci.org/Sahadar/pubsub.js.svg?branch=master)](https://travis-ci.org/Sahadar/pubsub.js)
 [![Dependency Status](https://david-dm.org/Sahadar/pubsub.js.svg)](https://david-dm.org/Sahadar/pubsub.js)
@@ -13,22 +14,23 @@ Dependency free JavaScript pubsub implementation with wildcards, inheritance and
 
 ## Features
 
-* The most advanced
+* Currently it is the most advanced dependency-free pub/sub library on npm
+
 * Very fast
 * Easy to understand
 * Configurable
-* Dependency free
-* Using native JavaScript code
+* Dependency free = using native JavaScript code
 * Works on server and browser side smoothly
 * Event inheritance
 * Wildcards
 * subscribeOnce method
 * Multiple subscriptions
 * Controll under event bubbling depth
-* Works with require.js library
+* Works with *require.js* library
 * Written with TDD
 * Possibility to make new instances of pubsub with private namespaces scope
 * Possibility to publish async events
+* Possibility to define context of every callback / or for all by providing pubsub|newInstance "context" param [link](#change_config)
 * Compiled + gzipped weighs only 1kB
 * Works also on IE 6+
 
@@ -39,7 +41,8 @@ Dependency free JavaScript pubsub implementation with wildcards, inheritance and
 
 Default pubsub.js configuration:
 ```javascript
-	separator : '/' //defined namespace separator
+	separator : '/' // defined namespace separator
+	context         // has dynamic value - when not defined it will be always reference to used callback in subscribe method
 	recurrent : false // defines inheritance of publish event
 	async 	  : false // if true - publish events will be asynchronous
 	log       : false // set to true will log unsubscribed namespaces to which You publish event
@@ -99,7 +102,7 @@ Default pubsub.js configuration:
 	//nothing happen - we've previously unsubscribed that subscription
 ```
 
-### Changing default configuration
+### Changing default configuration <a name="change_config"></a>
 
 ***Browser***
 
@@ -107,6 +110,7 @@ Default pubsub.js configuration:
 ```javascript
 	pubsub = {
 		separator : '.'
+		context : referenceToContext
 	}
 ```
 **After pubsub load - use it with your configuration, pubsub.js will replace that previous "pubsub" global variable with its own instance**
@@ -326,6 +330,8 @@ Default pubsub.js configuration:
 ```
 
 ## Changelog
+* v1.5.0
+	* Fix issue #8 - "context" option, new test cases
 * v1.4.3
 	* Fix issue #7 - "recurrent" option, new test cases
 * v1.4.2

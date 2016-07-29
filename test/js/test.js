@@ -482,3 +482,72 @@ asyncTest("Sync pubsub test (differences)", function() {
 	number1++;
 	ok(number1 === 2, "Sync pubsub publish worked properly");
 });
+
+test("Pubsub testing context argument in options", function() {
+	var contextArgument = ["object"];
+	var privatePubsub = pubsub.newInstance({
+		context : contextArgument
+	});
+
+	var privateSubscribtion1 = privatePubsub.subscribe('hello/context', function() {
+		var that = this;
+
+		ok(that === contextArgument, "Context argument in options work correctly for every subscription");
+	});
+	var privateSubscribtion2 = privatePubsub.subscribe('hello/that', function() {
+		var that = this;
+
+		ok(that === contextArgument, "Context argument in options work correctly for every subscription");
+	});
+
+	privatePubsub.publish('hello/context');
+	privatePubsub.publish('hello/that');
+});
+
+test("Pubsub testing override of context argument in options", function() {
+	var contextArgument = ["object"];
+	var contextArgument2 = ["object2"];
+	var privatePubsub = pubsub.newInstance({
+		context : contextArgument
+	});
+
+	var privateSubscribtion1 = privatePubsub.subscribe('hello/context', function() {
+		var that = this;
+
+		ok(that === contextArgument, "Context argument in options work correctly for every subscription");
+	});
+	var privateSubscribtion2 = privatePubsub.subscribe('hello/that', function() {
+		var that = this;
+
+		ok(that === contextArgument2, "Context argument in private subscription options work correctly");
+	}, {
+		context : contextArgument2
+	});
+
+	privatePubsub.publish('hello/context');
+	privatePubsub.publish('hello/that');
+});
+
+test("Pubsub testing use of private context for one subscribe", function() {
+	var contextArgument = ["object"];
+	var privatePubsub = pubsub.newInstance();
+
+	function callbackFirst() {
+		var that = this;
+
+		ok(that === callbackFirst, "No context definition = context is same function");
+	}
+	function callbackSecond() {
+		var that = this;
+
+		ok(that === contextArgument, "Context argument in subscribe config works correctly");
+	}
+
+	var privateSubscribtion1 = privatePubsub.subscribe('hello/context', callbackFirst);
+	var privateSubscribtion2 = privatePubsub.subscribe('hello/that', callbackSecond, {
+		context : contextArgument
+	});
+
+	privatePubsub.publish('hello/context');
+	privatePubsub.publish('hello/that');
+});
