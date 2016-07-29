@@ -22,7 +22,7 @@ Read documentation, check tests file, be inspired and feel free to use it and/or
 * Easy to understand
 * Dependency free = using native JavaScript code
 * Configurable [link](#change_config)
-* Works on server and browser side smoothly
+* Works on server and browser side smoothly [link](#change_config)
 * Event inheritance [link](#event_inheritance)
 * Wildcards [publish wildcard](#publish_wildcard) [subscribe wildcard](#subscribe_wildcard)
 * subscribeOnce method [link](#subscribeOnce)
