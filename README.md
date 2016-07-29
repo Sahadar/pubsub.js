@@ -2,7 +2,10 @@ pubsub.js
 =========
 
 Dependency free JavaScript pubsub implementation with wildcards, inheritance and multisubscriptions.
+
 Working smoothly both on frontend and backend side.
+
+Read documentation, check tests file, be inspired and feel free to use it and/or contribute.
 
 [![Build Status](https://travis-ci.org/Sahadar/pubsub.js.svg?branch=master)](https://travis-ci.org/Sahadar/pubsub.js)
 [![Dependency Status](https://david-dm.org/Sahadar/pubsub.js.svg)](https://david-dm.org/Sahadar/pubsub.js)
@@ -15,7 +18,6 @@ Working smoothly both on frontend and backend side.
 ## Features
 
 * Currently it is the most advanced dependency-free pub/sub library on npm
-
 * Very fast
 * Easy to understand
 * Configurable
