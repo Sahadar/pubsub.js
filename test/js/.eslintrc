@@ -1,0 +1,10 @@
+{
+    "globals": {
+        "test" : true,
+        "asyncTest" : true,
+        "ok" : true,
+        "start" : true,
+        "equal" : true,
+        "deepEqual" : true
+    }
+}

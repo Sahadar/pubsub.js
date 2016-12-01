@@ -370,6 +370,9 @@ Default pubsub.js configuration:
 ```
 
 ## Changelog
+* v1.5.1
+	* Fix "context" option for subscribeOnce
+	* .eslintrc style guide added + code stylistic fixes
 * v1.5.0
 	* Fix issue #8 - "context" option, new test cases
 * v1.4.3

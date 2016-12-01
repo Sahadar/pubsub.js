@@ -13,11 +13,11 @@
 	function Pubsub(config) {
 		var _eventObject = {};
 		var options = {
-			separator : (config && config.separator) ?  config.separator : '/',
-			recurrent : (config && typeof config.recurrent === 'boolean') ?  config.recurrent : (false),
-			depth     : (config && typeof config.depth === 'number') ?  config.depth :  null,
-			async     : (config && typeof config.async === 'boolean') ?  config.async : (false),
-			context   : (config && config.context) ?  config.context : null,
+			separator : (config && config.separator) ? config.separator : '/',
+			recurrent : (config && typeof config.recurrent === 'boolean') ? config.recurrent : (false),
+			depth     : (config && typeof config.depth === 'number') ? config.depth : null,
+			async     : (config && typeof config.async === 'boolean') ? config.async : (false),
+			context   : (config && config.context) ? config.context : null,
 			log       : (config && config.log) ? config.log : (false)
 		};
 
@@ -31,7 +31,7 @@
 		}
 
 		function executeCallback(subscriptions, args, async) {
-			async = (typeof async === 'boolean') ?  async : options.async;
+			async = (typeof async === 'boolean') ? async : options.async;
 			if(!subscriptions.length) {
 				return;
 			}
@@ -62,15 +62,15 @@
 			}
 		}
 
-		function publish(nsObject, args, parts, options) {
+		function publish(nsObject, args, parts, params) {
 			// work on copy - not on reference
 			parts = parts.slice();
 
 			var iPart = parts.shift();
-			var depth = options.depth;
-			var async = options.async;
-			var partsLength = options.partsLength;
-			var recurrent = options.recurrent;
+			var depth = params.depth;
+			var async = params.async;
+			var partsLength = params.partsLength;
+			var recurrent = params.recurrent;
 			var partNumber = (partsLength - parts.length);
 
 			// parts is empty
@@ -80,7 +80,7 @@
 			}
 			// handle subscribe wildcard
 			if(typeof nsObject['*'] !== 'undefined') {
-				publish(nsObject['*'], args, parts, options);
+				publish(nsObject['*'], args, parts, params);
 			}
 
 			// handle publish wildcard
@@ -89,9 +89,9 @@
 			}
 
 			// no namespace = leave publish
-			if (typeof nsObject[iPart] === "undefined") {
-				if(options.log) {
-					console.warn('There is no ' + nsString + ' subscription');
+			if(typeof nsObject[iPart] === "undefined") {
+				if(params.log) {
+					console.warn('There is no ' + params.nsString + ' subscription');
 				}
 				return;
 			}
@@ -107,12 +107,12 @@
 				executeCallback(nsObject._events, args, async);
 			}
 
-			publish(nsObject, args, parts, options);
+			publish(nsObject, args, parts, params);
 		}
 
-		function executeSubscribeWildcard(nsObject, args, options) {
-			var parts = options.parts;
-			var async = options.async;
+		function executeSubscribeWildcard(nsObject, args, params) {
+			var parts = params.parts;
+			var async = params.async;
 			var nextPart = null;
 
 			if(parts.length === 0) {
@@ -124,7 +124,7 @@
 					executeSubscribeWildcard(nsObject[nextPart], args, {
 						parts : parts,
 						async : async,
-						nsString : options.nsString
+						nsString : params.nsString
 					});
 				}
 			}
@@ -143,8 +143,8 @@
 
 			//Iterating through _eventObject to find proper nsObject
 			nsObject = _eventObject;
-			for (i = 0; i < parts.length; i += 1) {
-				if (typeof nsObject[parts[i]] === "undefined") {
+			for(i = 0; i < parts.length; i += 1) {
+				if(typeof nsObject[parts[i]] === "undefined") {
 					nsObject[parts[i]] = {};
 					nsObject[parts[i]]._events = [];
 				}
@@ -157,11 +157,11 @@
 			};
 
 			nsObject._events.push(eventObject);
-			return {namespace : parts.join(options.separator),
+			return { namespace : parts.join(options.separator),
 				event : eventObject };
 		}
 
-		function unsubscribe (subscribeObject) {
+		function unsubscribe(subscribeObject) {
 			if(subscribeObject === null || typeof subscribeObject === 'undefined') {
 				return null;
 			}
@@ -173,8 +173,8 @@
 
 			//Iterating through _eventObject to find proper nsObject
 			nsObject = _eventObject;
-			for (i = 0; i < parts.length; i += 1) {
-				if (typeof nsObject[parts[i]] === "undefined") {
+			for(i = 0; i < parts.length; i += 1) {
+				if(typeof nsObject[parts[i]] === "undefined") {
 					if(options.log) {
 						console.error('There is no ' + nsString + ' subscription');
 					}
@@ -183,7 +183,7 @@
 				nsObject = nsObject[parts[i]];
 			}
 
-			forEach(nsObject._events, function(eventId){
+			forEach(nsObject._events, function(eventId) {
 				if(nsObject._events[eventId] === eventObject) {
 					nsObject._events.splice(eventId, 1);
 				}
@@ -200,8 +200,7 @@
 			 *        @param depth integer how many namespaces separated by dots will be executed
 			 */
 			publish : function(nsString, args, params) {
-				var that = this,
-					parts = nsString.split(options.separator),
+				var parts = nsString.split(options.separator),
 					recurrent = (typeof params === 'object' && params.recurrent) ? params.recurrent : options.recurrent, // bubbles event throught namespace if true
 					depth = (typeof params === 'object' && params.depth) ? params.depth : options.depth,
 					async = (typeof params === 'object' && params.async) ? params.async : options.async,
@@ -231,7 +230,7 @@
 			 *		@param context object/nothing Optional object which will be used as "this" in callback
 			 */
 			subscribe : function(nsString, callback, params) {
-				var that = this,
+				var self = this,
 					subscriptions = [];
 
 				// array of callbacks - multiple subscription
@@ -239,17 +238,17 @@
 					forEach(callback, function(number) {
 						var oneCallback = callback[number];
 
-						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [nsString, oneCallback, params]));
+						subscriptions =	subscriptions.concat(self.subscribe(nsString, oneCallback, params));
 					});
 				// array of namespaces - multiple subscription
 				} else if(typeof nsString === 'object' && nsString instanceof Array) {
 					forEach(nsString, function(number) {
 						var namespace = nsString[number];
 
-						subscriptions =	subscriptions.concat(that.subscribe.apply(that, [namespace, callback, params]));
+						subscriptions =	subscriptions.concat(self.subscribe(namespace, callback, params));
 					});
 				} else {
-					return subscribe.apply(that, arguments);
+					return subscribe.apply(self, arguments);
 				}
 				return subscriptions;
 			},
@@ -261,16 +260,17 @@
 			 *		@param context object/nothing Optional object which will be used as "this" in callback
 			 */
 			subscribeOnce : function(nsString, callback, params) {
-				var that = this,
-					context = (params && typeof params.context !== 'undefined') ? params.context : null,
+				var self = this,
 					subscription = null;
 
-				var subscriptionCallback = function() {
-					callback.apply(this, arguments);
-					that.unsubscribe(subscription);
-				};
+				function subscriptionCallback() {
+					var context = this;
 
-				subscription = that.subscribe.apply(that, [nsString, subscriptionCallback, context]);
+					callback.apply(context, arguments);
+					self.unsubscribe(subscription);
+				}
+
+				subscription = self.subscribe(nsString, subscriptionCallback, params);
 				return subscription;
 			},
 			/**
@@ -278,29 +278,29 @@
 			 * @param subscribeObject subscription object given on subscribe (returned from subscription)
 			 */
 			unsubscribe : function(subscribeObject) {
-				var that = this;
+				var self = this;
 
 				//if we have array of callbacks - multiple subscription
 				if(subscribeObject instanceof Array) {
 					forEach(subscribeObject, function(number) {
 						var oneSubscribtion = subscribeObject[number];
 
-						unsubscribe.apply(that, [oneSubscribtion]);
+						unsubscribe.apply(self, [oneSubscribtion]);
 					});
 				} else {
-					unsubscribe.apply(that, arguments);
+					unsubscribe.apply(self, arguments);
 				}
 			},
 			/**
 			 * newInstance - makes new instance of pubsub object with its own config
-			 * @param config instance configuration
+			 * @param params instance configuration
 			 *        @param separator separator (default is "/")
 			 *        @param recurrent should publish events be bubbled through namespace
 			 *        @param async should publish events be asynchronous - not blocking function execution
 			 *        @param log console.warn/error every problem
 			 */
-			newInstance : function(config) {
-				return new Pubsub(config);
+			newInstance : function(params) {
+				return new Pubsub(params);
 			}
 		}; //return block
 	}
