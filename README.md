@@ -370,6 +370,8 @@ Default pubsub.js configuration:
 ```
 
 ## Changelog
+* v1.5.2
+	* Fixed IE11 cross frames communication (isArray)
 * v1.5.1
 	* Fix "context" option for subscribeOnce
 	* .eslintrc style guide added + code stylistic fixes
