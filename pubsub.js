@@ -30,7 +30,11 @@
 			}
 		}
 
-		function executeCallback(subscriptions, args, async) {
+        function isArray (obj) {
+			return Array.isArray ? Array.isArray(obj) : Object.prototype.toString.call(obj) === '[object Array]';
+        }
+
+        function executeCallback(subscriptions, args, async) {
 			async = (typeof async === 'boolean') ? async : options.async;
 			if(!subscriptions.length) {
 				return;
@@ -234,14 +238,14 @@
 					subscriptions = [];
 
 				// array of callbacks - multiple subscription
-				if(typeof callback === 'object' && callback instanceof Array) {
+				if(isArray(callback)) {
 					forEach(callback, function(number) {
 						var oneCallback = callback[number];
 
 						subscriptions =	subscriptions.concat(self.subscribe(nsString, oneCallback, params));
 					});
 				// array of namespaces - multiple subscription
-				} else if(typeof nsString === 'object' && nsString instanceof Array) {
+				} else if(isArray(nsString)) {
 					forEach(nsString, function(number) {
 						var namespace = nsString[number];
 
@@ -281,7 +285,7 @@
 				var self = this;
 
 				//if we have array of callbacks - multiple subscription
-				if(subscribeObject instanceof Array) {
+				if(isArray(subscribeObject)) {
 					forEach(subscribeObject, function(number) {
 						var oneSubscribtion = subscribeObject[number];
 
