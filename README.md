@@ -291,7 +291,7 @@ Default pubsub.js configuration:
 	console.log(number1 + ',' + number2); //2,4
 ```
 
-###making new instances with own namespaces scope <a name="new_instance"></a>
+### making new instances with own namespaces scope <a name="new_instance"></a>
 ```javascript
 	var number1 = 0;
 	var number2 = 0;
@@ -328,7 +328,7 @@ Default pubsub.js configuration:
 	privatePubsub.publish('hello/context');
 ```
 
-###Using pubsub asynchronously <a name="async_events"></a>
+### Using pubsub asynchronously <a name="async_events"></a>
 ```javascript
 	var number1 = 0;
 
@@ -347,7 +347,7 @@ Default pubsub.js configuration:
 	console.log(number1); //1
 ```
 
-###Using context param in subscribe method <a name="subscribe_context"></a>
+### Using context param in subscribe method <a name="subscribe_context"></a>
 ```javascript
 	var contextArgument = ["object"];
 	var privatePubsub = pubsub.newInstance();
