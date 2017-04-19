@@ -320,7 +320,7 @@
 		module.exports = pubsubInstance;
 	}
 
-	if(typeof window === 'object') {
+	if(typeof window === 'object' && !window.pubsub) {
 		window.pubsub = pubsubInstance;
 		if(window !== scope) {
 			scope.pubsub = pubsubInstance;
